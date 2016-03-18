@@ -8,8 +8,7 @@ services:
     command: /bin/bash -c "
       route del default;
       route add default gw 10.1.0.101 eth0;
-      route;
-      ping 10.1.0.101"
+      ping 9.1.0.44"
     networks:
       lan10:
         ipv4_address: 10.1.0.44
@@ -20,8 +19,7 @@ services:
     command:  /bin/bash -c "
       route del default;
       route add default gw 9.1.0.102 eth0;
-      route;
-      ping 9.1.0.102"
+      ping 10.1.0.44"
     networks:
       lan9:
         ipv4_address: 9.1.0.44
@@ -29,8 +27,9 @@ services:
   router1:
     image: higebu/vyos
     privileged: true
-    command: /bin/vbash -c "
-      sbin/init"
+    volumes:
+      - .:/injected
+    command: sbin/init
     networks:
       lan10:
         ipv4_address: 10.1.0.101
@@ -42,6 +41,8 @@ services:
   router2:
     image: higebu/vyos
     privileged: true
+    volumes:
+      - .:/injected
     command: sbin/init
     networks:
       lan9:
@@ -56,7 +57,8 @@ networks:
     ipam:
       config:
       - subnet: 10.1.0.0/16
-        # default gateway (will be overridden)
+        # default gateway will be overridden
+        # as it is bridged to the internet
         gateway: 10.1.0.254
   lan9:
     ipam:
