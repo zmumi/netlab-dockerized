@@ -22,7 +22,7 @@ interfaces {
 }
 protocols {
     static {
-        route 9.1.0.0/16 {
+        route 0.0.0.0/0 {
             next-hop 8.1.0.102 {
                 distance 1
             }
