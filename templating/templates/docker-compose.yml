@@ -1,0 +1,67 @@
+version: '2'
+
+services:
+  {% for hostname, params in clients.items() %}
+  {{hostname}}:
+    image: ubuntu
+    privileged: true
+    command: /bin/bash -c "
+      route del default;
+      route add default gw {{ params['gateway'] }} eth0;
+      ping {{ params['ping'] }}"
+    networks:
+      {{ params['network'] }}:
+        ipv4_address: {{ params['ip'] }}
+  {% endfor %}
+
+  router1:
+    image: higebu/vyos
+    privileged: true
+    volumes:
+      - .:/injected
+    command: sbin/init
+    networks:
+      lan10:
+        ipv4_address: 10.1.0.101
+      lan8:
+        ipv4_address: 8.1.0.101
+      lan7:
+        ipv4_address: 7.1.0.101
+
+  router2:
+    image: higebu/vyos
+    privileged: true
+    volumes:
+      - .:/injected
+    command: sbin/init
+    networks:
+      lan9:
+        ipv4_address: 9.1.0.102
+      lan8:
+        ipv4_address: 8.1.0.102
+      lan7:
+        ipv4_address: 7.1.0.102
+
+networks:
+  lan10:
+    ipam:
+      config:
+      - subnet: 10.1.0.0/16
+        # default gateway will be overridden
+        # as it is bridged to the internet
+        gateway: 10.1.0.254
+  lan9:
+    ipam:
+      config:
+      - subnet: 9.1.0.0/16
+        gateway: 9.1.0.254
+  lan8:
+    ipam:
+      config:
+      - subnet: 8.1.0.0/16
+        gateway: 8.1.0.254
+  lan7:
+    ipam:
+      config:
+      - subnet: 7.1.0.0/16
+        gateway: 7.1.0.254
