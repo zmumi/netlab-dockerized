@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./docker-compose up -d
+docker-compose up -d
 sleep 5
 
 docker exec -it zaawtechintsys_router1_1 cp  /injected/router1-config.boot  /config/config.boot
