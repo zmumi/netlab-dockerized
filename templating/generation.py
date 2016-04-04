@@ -6,23 +6,49 @@ env = Environment(loader=PackageLoader('templating', 'templates'))
 
 params = {
     'clients': {
-        'client-hostname-1': {
+        'client-1': {
             'network': 'lan10',
             'ip': '10.1.0.44',
-            'gateway': '10.1.0.101',
-            'ping': '9.1.0.44',
+            'gateway': '10.1.0.101'
         },
-        'client-hostname-2': {
+        'client-2': {
             'network': 'lan9',
             'ip': '9.1.0.44',
-            'gateway': '9.1.0.102',
-            'ping': '10.1.0.44',
-
+            'gateway': '9.1.0.102'
+        }
+    },
+    'routers': {
+        'router-1': {
+            'networks': {
+                'lan10': {
+                    'ipv4': '10.1.0.101'
+                },
+                'lan8': {
+                    'ipv4': '8.1.0.101'
+                },
+                'lan7': {
+                    'ipv4': '7.1.0.101'
+                }}},
+        'router-2': {
+            'networks': {
+                'lan9': {
+                    'ipv4': '9.1.0.102'
+                },
+                'lan8': {
+                    'ipv4': '8.1.0.102'
+                },
+                'lan7': {
+                    'ipv4': '7.1.0.102'
+                }
+            }
         }
     }
 }
 
-template = env.get_template('docker-compose.yml')
-template.stream(params).dump('docker-compose.yml')
+compose_template = env.get_template('docker-compose.yml')
+compose_template.stream(params).dump('docker-compose.yml')
+print compose_template.render(params)
 
-print template.render(params)
+up_template = env.get_template('up.sh')
+up_template.stream(params).dump('up.sh')
+print up_template.render(params)

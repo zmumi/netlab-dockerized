@@ -1,46 +1,39 @@
 version: '2'
 
 services:
-  {% for hostname, params in clients.items() %}
-  {{hostname}}:
+  {% for client_name, params in clients.items() %}
+  {{client_name}}:
     image: ubuntu
     privileged: true
+    container_name: {{client_name}}
     command: /bin/bash -c "
       route del default;
       route add default gw {{ params['gateway'] }} eth0;
-      ping {{ params['ping'] }}"
+      route;
+
+      rsyslogd;
+      tail -f /var/log/syslog"
     networks:
       {{ params['network'] }}:
         ipv4_address: {{ params['ip'] }}
   {% endfor %}
 
-  router1:
+  {% for router_name, params in routers.items() %}
+  {{router_name}}:
+    container_name: {{router_name}}
     image: higebu/vyos
     privileged: true
     volumes:
       - .:/injected
     command: sbin/init
     networks:
-      lan10:
-        ipv4_address: 10.1.0.101
-      lan8:
-        ipv4_address: 8.1.0.101
-      lan7:
-        ipv4_address: 7.1.0.101
-
-  router2:
-    image: higebu/vyos
-    privileged: true
-    volumes:
-      - .:/injected
-    command: sbin/init
-    networks:
-      lan9:
-        ipv4_address: 9.1.0.102
-      lan8:
-        ipv4_address: 8.1.0.102
-      lan7:
-        ipv4_address: 7.1.0.102
+    # addresses are set here only in order to make sure they will be available
+    # (true address assignment is done by injected config.boot file)
+    {% for network_name, network_params in params['networks'].items() %}
+      {{network_name}}:
+        ipv4_address: {{network_params['ipv4']}}
+    {% endfor %}
+  {% endfor %}
 
 networks:
   lan10:
