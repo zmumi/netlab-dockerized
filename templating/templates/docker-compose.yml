@@ -36,25 +36,12 @@ services:
   {% endfor %}
 
 networks:
-  lan10:
+{% for network_name, network_params in networks.items() %}
+  {{network_name}}:
     ipam:
       config:
-      - subnet: 10.1.0.0/16
+      - subnet: {{network_params['subnet']}}
         # default gateway will be overridden
         # as it is bridged to the internet
-        gateway: 10.1.0.254
-  lan9:
-    ipam:
-      config:
-      - subnet: 9.1.0.0/16
-        gateway: 9.1.0.254
-  lan8:
-    ipam:
-      config:
-      - subnet: 8.1.0.0/16
-        gateway: 8.1.0.254
-  lan7:
-    ipam:
-      config:
-      - subnet: 7.1.0.0/16
-        gateway: 7.1.0.254
+        gateway: {{network_params['docker_gateway']}}
+{% endfor %}

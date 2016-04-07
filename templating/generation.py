@@ -28,7 +28,9 @@ params = {
                 },
                 'lan7': {
                     'ipv4': '7.1.0.101'
-                }}},
+                }
+            }
+        },
         'router-2': {
             'networks': {
                 'lan9': {
@@ -41,6 +43,24 @@ params = {
                     'ipv4': '7.1.0.102'
                 }
             }
+        }
+    },
+    'networks': {
+        'lan10': {
+            'subnet': '10.1.0.0/16',
+            'docker_gateway': '10.1.0.254'
+        },
+        'lan9': {
+            'subnet': '9.1.0.0/16',
+            'docker_gateway': '9.1.0.254'
+        },
+        'lan8': {
+            'subnet': '8.1.0.0/16',
+            'docker_gateway': '8.1.0.254'
+        },
+        'lan7': {
+            'subnet': '7.1.0.0/16',
+            'docker_gateway': '7.1.0.254'
         }
     }
 }
