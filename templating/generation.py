@@ -21,26 +21,32 @@ params = {
         'router-1': {
             'networks': {
                 'lan10': {
-                    'ipv4': '10.1.0.101'
+                    'ipv4': '10.1.0.101',
+                    'mask': '16'
                 },
                 'lan8': {
-                    'ipv4': '8.1.0.101'
+                    'ipv4': '8.1.0.101',
+                    'mask': '16'
                 },
                 'lan7': {
-                    'ipv4': '7.1.0.101'
+                    'ipv4': '7.1.0.101',
+                    'mask': '16'
                 }
             }
         },
         'router-2': {
             'networks': {
                 'lan9': {
-                    'ipv4': '9.1.0.102'
+                    'ipv4': '9.1.0.102',
+                    'mask': '16'
                 },
                 'lan8': {
-                    'ipv4': '8.1.0.102'
+                    'ipv4': '8.1.0.102',
+                    'mask': '16'
                 },
                 'lan7': {
-                    'ipv4': '7.1.0.102'
+                    'ipv4': '7.1.0.102',
+                    'mask': '16'
                 }
             }
         }
@@ -72,3 +78,8 @@ print compose_template.render(params)
 up_template = env.get_template('up.sh')
 up_template.stream(params).dump('up.sh')
 print up_template.render(params)
+
+for (router, router_params) in params['routers'].items():
+    up_template = env.get_template('config.boot')
+    up_template.stream(router_params).dump(router + '-config.boot')
+    print up_template.render(router_params)

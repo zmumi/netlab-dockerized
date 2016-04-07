@@ -1,33 +1,24 @@
 interfaces {
-    ethernet eth0 {
-        address 10.1.0.101/16
+{% for network_name, params in networks.items() %}
+    /* {{network_name}} */
+    ethernet eth{{loop.index-1}} {
+        address {{params['ipv4']}}/{{params['mask']}}
         duplex auto
         smp_affinity auto
         speed auto
     }
-    ethernet eth1 {
-        address 8.1.0.101/16
-        duplex auto
-        smp_affinity auto
-        speed auto
-    }
-    ethernet eth2 {
-        address 7.1.0.101/16
-        duplex auto
-        smp_affinity auto
-        speed auto
-    }
+{% endfor %}
     loopback lo {
     }
 }
 protocols {
-    static {
+    /* static {
         route 0.0.0.0/0 {
             next-hop 8.1.0.102 {
                 distance 1
             }
         }
-    }
+    } */
 }
 system {
     config-management {
