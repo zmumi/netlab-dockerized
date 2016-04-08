@@ -135,11 +135,78 @@
             document.getElementById('nodes').innerHTML = JSON.stringify(nodes.get(), null, 4);
         });
         nodes.add([
-            {id: '1', label: 'Node 1'},
-            {id: '2', label: 'Node 2'},
-            {id: '3', label: 'Node 3'},
-            {id: '4', label: 'Node 4'},
-            {id: '5', label: 'Node 5'}
+            {
+                id: 'client-1',
+                label: 'client-1',
+                properties: {
+                    type: 'client',
+                    'network': 'lan10',
+                    'ip': '10.1.0.44',
+                    'gateway': '10.1.0.101'
+                },
+                color: 'lightgray'
+            },
+            {
+                id: 'client-2',
+                label: 'client-2',
+                properties: {
+                    type: 'client',
+                    'network': 'lan9',
+                    'ip': '9.1.0.44',
+                    'gateway': '9.1.0.102'
+                },
+                color: 'lightgray'
+            },
+            {
+                id: 'router-1',
+                label: 'router-1',
+                properties: {
+                    type: 'router'
+                }
+            },
+            {
+                id: 'router-2',
+                label: 'router-2',
+                properties: {
+                    type: 'router'
+                }
+            },
+            {
+                id: 'lan10',
+                label: 'lan10',
+                properties: {
+                    type: 'lan',
+                    subnet: '10.1.0.0/16'
+                },
+                color: 'white'
+            },
+            {
+                id: 'lan9',
+                label: 'lan9',
+                properties: {
+                    type: 'lan',
+                    subnet: '9.1.0.0/16'
+                },
+                color: 'white'
+            },
+            {
+                id: 'lan8',
+                label: 'lan8',
+                properties: {
+                    type: 'lan',
+                    subnet: '8.1.0.0/16'
+                },
+                color: 'white'
+            },
+            {
+                id: 'lan7',
+                label: 'lan7',
+                properties: {
+                    type: 'lan',
+                    subnet: '7.1.0.0/16'
+                },
+                color: 'white'
+            },
         ]);
 
         // create an array with edges
@@ -148,10 +215,80 @@
             document.getElementById('edges').innerHTML = JSON.stringify(edges.get(), null, 4);
         });
         edges.add([
-            {id: '1', from: '1', to: '2'},
-            {id: '2', from: '1', to: '3'},
-            {id: '3', from: '2', to: '4'},
-            {id: '4', from: '2', to: '5'}
+            {
+                id: 'client-1/lan10',
+                from: 'client-1',
+                to: 'lan10',
+                properties: {
+                    type: 'client',
+                    'ip': '10.1.0.44',
+                    'gateway': '10.1.0.101'
+                }
+            },
+            {
+                id: 'client-2/lan10',
+                from: 'client-2',
+                to: 'lan9',
+                properties: {
+                    type: 'client',
+                    'ip': '9.1.0.44',
+                    'gateway': '9.1.0.102'
+                }
+            },
+            {
+                id: 'router-1/lan10',
+                from: 'router-1',
+                to: 'lan10',
+                properties: {
+                    type: 'router',
+                    'ip': '10.1.0.101'
+                }
+            },
+            {
+                id: 'router-1/lan8',
+                from: 'router-1',
+                to: 'lan8',
+                properties: {
+                    type: 'router',
+                    'ip': '8.1.0.101'
+                }
+            },
+            {
+                id: 'router-1/lan7',
+                from: 'router-1',
+                to: 'lan7',
+                properties: {
+                    type: 'router',
+                    'ip': '7.1.0.101'
+                }
+            },
+            {
+                id: 'router-2/lan9',
+                from: 'router-2',
+                to: 'lan9',
+                properties: {
+                    type: 'router',
+                    'ip': '9.1.0.102'
+                }
+            },
+            {
+                id: 'router-2/lan8',
+                from: 'router-2',
+                to: 'lan8',
+                properties: {
+                    type: 'router',
+                    'ip': '8.1.0.102'
+                }
+            },
+            {
+                id: 'router-2/lan7',
+                from: 'router-2',
+                to: 'lan7',
+                properties: {
+                    type: 'router',
+                    'ip': '7.1.0.102'
+                }
+            },
         ]);
 
         // create a network
@@ -182,12 +319,12 @@
                 <tr>
                     <td></td>
                     <td><label for="node-id">Id</label></td>
-                    <td><input id="node-id" type="text" value="6"></td>
+                    <td><input id="node-id" type="text" value="client-3"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td><label for="node-label">Label</label></td>
-                    <td><input id="node-label" type="text" value="Node 6"></td>
+                    <td><input id="node-label" type="text" value="client-3"></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -206,17 +343,17 @@
                 <tr>
                     <td></td>
                     <td><label for="edge-id">Id</label></td>
-                    <td><input id="edge-id" type="text" value="5"></td>
+                    <td><input id="edge-id" type="text" value="client-1/lan9"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td><label for="edge-from">From</label></td>
-                    <td><input id="edge-from" type="text" value="3"></td>
+                    <td><input id="edge-from" type="text" value="client-1"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td><label for="edge-to">To</label></td>
-                    <td><input id="edge-to" type="text" value="4"></td>
+                    <td><input id="edge-to" type="text" value="lan9"></td>
                 </tr>
                 <tr>
                     <td></td>
