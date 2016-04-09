@@ -103,7 +103,7 @@
                 id: document.getElementById('edge-id').value,
                 from: document.getElementById('edge-from').value,
                 to: document.getElementById('edge-to').value,
-                properties: JSON.parse(document.getElementById('properties').value)
+                properties: JSON.parse(document.getElementById('edge-properties').value)
             });
         }
         catch (err) {
@@ -116,7 +116,7 @@
                 id: document.getElementById('edge-id').value,
                 from: document.getElementById('edge-from').value,
                 to: document.getElementById('edge-to').value,
-                properties: JSON.parse(document.getElementById('properties').value)
+                properties: JSON.parse(document.getElementById('edge-properties').value)
             });
         }
         catch (err) {
@@ -304,14 +304,28 @@
         var options = {};
         network = new vis.Network(container, data, options);
 
+        network.on("doubleClick", function (params) {
+            if(params.nodes[0]) {
+                var node = nodes.get(params.nodes[0]);
+                $('#node-id').val(node.id);
+                $('#node-label').val(node.label);
+                $('#node-properties').val(JSON.stringify(node.properties));
+            }
+            if(params.edges[0]) {
+                var edge = edges.get(params.edges[0]);
+                $('#edge-id').val(edge.id);
+                $('#edge-from').val(edge.from);
+                $('#edge-to').val(edge.to);
+                $('#edge-properties').val(JSON.stringify(edge.properties));
+            }
+        });
     }
 
     $(document).ready(draw)
 </script>
 
 <p>
-    This example demonstrates dynamically adding, updating and removing nodes
-    and edges using a DataSet.
+    Double-click on element to edit it.
 </p>
 
 <h1>Adjust</h1>
@@ -368,8 +382,8 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td><label for="properties">Properties</label></td>
-                    <td><textarea id="properties" style="height: 100px; width: 300px">{
+                    <td><label for="edge-properties">Properties</label></td>
+                    <td><textarea id="edge-properties" style="height: 100px; width: 300px">{
     "type": "router",
     "ip": "7.1.0.103"
 }                    </textarea></td>
