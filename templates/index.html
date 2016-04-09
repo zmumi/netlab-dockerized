@@ -67,7 +67,8 @@
         try {
             nodes.add({
                 id: document.getElementById('node-id').value,
-                label: document.getElementById('node-label').value
+                label: document.getElementById('node-label').value,
+                properties: JSON.parse(document.getElementById('node-properties').value)
             });
         }
         catch (err) {
@@ -79,7 +80,8 @@
         try {
             nodes.update({
                 id: document.getElementById('node-id').value,
-                label: document.getElementById('node-label').value
+                label: document.getElementById('node-label').value,
+                properties: JSON.parse(document.getElementById('node-properties').value)
             });
         }
         catch (err) {
@@ -100,7 +102,8 @@
             edges.add({
                 id: document.getElementById('edge-id').value,
                 from: document.getElementById('edge-from').value,
-                to: document.getElementById('edge-to').value
+                to: document.getElementById('edge-to').value,
+                properties: JSON.parse(document.getElementById('properties').value)
             });
         }
         catch (err) {
@@ -112,7 +115,8 @@
             edges.update({
                 id: document.getElementById('edge-id').value,
                 from: document.getElementById('edge-from').value,
-                to: document.getElementById('edge-to').value
+                to: document.getElementById('edge-to').value,
+                properties: JSON.parse(document.getElementById('properties').value)
             });
         }
         catch (err) {
@@ -319,12 +323,19 @@
                 <tr>
                     <td></td>
                     <td><label for="node-id">Id</label></td>
-                    <td><input id="node-id" type="text" value="client-3"></td>
+                    <td><input id="node-id" type="text" value="router-3"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td><label for="node-label">Label</label></td>
-                    <td><input id="node-label" type="text" value="client-3"></td>
+                    <td><input id="node-label" type="text" value="router-3"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><label for="node-properties">Properties</label></td>
+                    <td><textarea id="node-properties" style="height: 100px; width: 300px">{
+    "type": "router"
+}                    </textarea></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -343,17 +354,25 @@
                 <tr>
                     <td></td>
                     <td><label for="edge-id">Id</label></td>
-                    <td><input id="edge-id" type="text" value="client-1/lan9"></td>
+                    <td><input id="edge-id" type="text" value="router-3/lan9"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td><label for="edge-from">From</label></td>
-                    <td><input id="edge-from" type="text" value="client-1"></td>
+                    <td><input id="edge-from" type="text" value="router-3"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td><label for="edge-to">To</label></td>
-                    <td><input id="edge-to" type="text" value="lan9"></td>
+                    <td><input id="edge-to" type="text" value="lan7"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><label for="properties">Properties</label></td>
+                    <td><textarea id="properties" style="height: 100px; width: 300px">{
+    "type": "router",
+    "ip": "7.1.0.103"
+}                    </textarea></td>
                 </tr>
                 <tr>
                     <td></td>
