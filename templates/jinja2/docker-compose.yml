@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+  {% for client_name, params in clients.items() %}
+  {{client_name}}:
+    image: ubuntu
+    privileged: true
+    container_name: {{client_name}}
+    command: /bin/bash -c "
+      route del default;
+      route add default gw {{ params['gateway'] }} eth0;
+      route;
+
+      rsyslogd;
+      tail -f /var/log/syslog"
+    networks:
+      {{ params['network'] }}:
+        ipv4_address: {{ params['ip'] }}
+  {% endfor %}
+
+  {% for router_name, params in routers.items() %}
+  {{router_name}}:
+    container_name: {{router_name}}
+    image: higebu/vyos
+    privileged: true
+    volumes:
+      - .:/injected
+    command: sbin/init
+    networks:
+    # addresses are set here only in order to make sure they will be available
+    # (true address assignment is done by injected config.boot file)
+    {% for network_name, network_params in params['networks'].items() %}
+      {{network_name}}:
+        ipv4_address: {{network_params['ipv4']}}
+    {% endfor %}
+  {% endfor %}
+
+networks:
+{% for network_name, network_params in networks.items() %}
+  {{network_name}}:
+    ipam:
+      config:
+      - subnet: {{network_params['subnet']}}
+        # default gateway will be overridden
+        # as it is bridged to the internet
+        gateway: {{network_params['docker_gateway']}}
+{% endfor %}

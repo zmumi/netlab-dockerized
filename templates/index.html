@@ -305,13 +305,13 @@
         network = new vis.Network(container, data, options);
 
         network.on("doubleClick", function (params) {
-            if(params.nodes[0]) {
+            if (params.nodes[0]) {
                 var node = nodes.get(params.nodes[0]);
                 $('#node-id').val(node.id);
                 $('#node-label').val(node.label);
                 $('#node-properties').val(JSON.stringify(node.properties));
             }
-            if(params.edges[0]) {
+            if (params.edges[0]) {
                 var edge = edges.get(params.edges[0]);
                 $('#edge-id').val(edge.id);
                 $('#edge-from').val(edge.from);
@@ -321,11 +321,26 @@
         });
     }
 
-    $(document).ready(draw)
+    $(document).ready(draw);
+    $(document).ready(function () {
+        $("#generate").click(function () {
+            $.post({
+                url: "configurator/generate",
+                dataType: "json",
+                data: {
+                    csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
+                    nodes: JSON.stringify(nodes.get()),
+                    edges: JSON.stringify(edges.get())
+                }
+            })
+        })
+    })
 </script>
 
 <p>
     Double-click on element to edit it.
+    {% csrf_token %}
+    <button id="generate">Generate</button>
 </p>
 
 <h1>Adjust</h1>
