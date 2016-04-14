@@ -48,10 +48,18 @@ def data_as_context(edges, nodes):
             parsed = ipaddress.ip_network(subnet)
             params['routers'][edge['from']]['networks'][lan] = {
                 'ipv4': properties['ip'],
+                'mac': predict_mac_address(properties),
                 'mask': str(parsed.prefixlen)
             }
 
     return params
+
+
+# predicts mac address according to current implementation:
+# https://github.com/docker/docker/blob/3d13fddd2bc4d679f0eaa68b0be877e5a816ad53/vendor/src/github.com/docker/libnetwork/netutils/utils.go#L104
+# such hack enables us to properly identify interfaces later on (what enables us to configure them)
+def predict_mac_address(properties):
+    return "02:42:" + ":".join(map(lambda x: "%.2x" % int(x), properties['ip'].split(".")))
 
 
 def _render(template, params, path, template_loader):

@@ -1,7 +1,7 @@
 interfaces {
 {% for network_name, params in networks.items() %}
     /* {{network_name}} */
-    ethernet eth{{loop.index-1}} {
+    ethernet PLACEHOLDER_{{params['mac']}} {
         address {{params['ipv4']}}/{{params['mask']}}
         duplex auto
         smp_affinity auto
