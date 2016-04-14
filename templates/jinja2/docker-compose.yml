@@ -5,6 +5,7 @@ services:
   {{client_name}}:
     image: ubuntu
     privileged: true
+    mem_limit: 100m
     container_name: {{client_name}}
     command: /bin/bash -c "
       route del default;
@@ -21,8 +22,9 @@ services:
   {% for router_name, params in routers.items() %}
   {{router_name}}:
     container_name: {{router_name}}
-    image: higebu/vyos
+    image: zmumichal/vyos
     privileged: true
+    mem_limit: 200m
     volumes:
       - .:/injected
     command: sbin/init
