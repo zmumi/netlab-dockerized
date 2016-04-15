@@ -11,6 +11,12 @@ interfaces {
     loopback lo {
     }
 }
+service {
+    ssh {
+        listen-address 0.0.0.0
+        port 22
+    }
+}
 protocols {
     /* static {
         route 0.0.0.0/0 {

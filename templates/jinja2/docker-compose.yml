@@ -6,6 +6,7 @@ services:
     image: ubuntu
     privileged: true
     mem_limit: 100m
+    hostname: {{client_name}}
     container_name: {{client_name}}
     command: /bin/bash -c "
       route del default;
@@ -15,12 +16,14 @@ services:
       rsyslogd;
       tail -f /var/log/syslog"
     networks:
+      service:
       {{ params['network'] }}:
         ipv4_address: {{ params['ip'] }}
   {% endfor %}
 
   {% for router_name, params in routers.items() %}
   {{router_name}}:
+    hostname: {{router_name}}
     container_name: {{router_name}}
     image: zmumichal/vyos
     privileged: true
@@ -29,6 +32,7 @@ services:
       - .:/injected
     command: sbin/init
     networks:
+      service:
     # addresses are set here only in order to make sure they will be available
     # (true address assignment is done by injected config.boot file)
     {% for network_name, network_params in params['networks'].items() %}
@@ -38,6 +42,7 @@ services:
   {% endfor %}
 
 networks:
+  service:
 {% for network_name, network_params in networks.items() %}
   {{network_name}}:
     ipam:
