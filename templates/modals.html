@@ -1,0 +1,185 @@
+<!-- CLIENT Modal -->
+<div class="modal" id="clientNodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="clientNodeID" class="col-sm-2 control-label">ID</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="clientNodeID" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientNodeLabel" class="col-sm-2 control-label">Label</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="clientNodeLabel" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientNodeNetwork" class="col-sm-2 control-label">Lan</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="clientNodeNetwork" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientNodeIP" class="col-sm-2 control-label">IP</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="clientNodeIP" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientNodeGateway" class="col-sm-2 control-label">Gateway</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="clientNodeGateway" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="clientNodeSave" type="submit" class="btn btn-default">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ROUTER Modal -->
+<div class="modal" id="routerNodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="routerNodeID" class="col-sm-2 control-label">ID</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="routerNodeID" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="routerNodeLabel" class="col-sm-2 control-label">Label</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="routerNodeLabel" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="routerNodeSave" type="submit" class="btn btn-default">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ROUTER-EDGE Modal -->
+<div class="modal" id="routerEdgeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="routerEdgeID" class="col-sm-2 control-label">ID</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="routerEdgeID" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="routerEdgeFrom" class="col-sm-2 control-label">From</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="routerEdgeFrom" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="routerEdgeTo" class="col-sm-2 control-label">To</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="routerEdgeTo" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="routerEdgeIP" class="col-sm-2 control-label">IP</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="routerEdgeIP" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="routerEdgeSave" type="submit" class="btn btn-default">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CLIENT-EDGE Modal -->
+<div class="modal" id="clientEdgeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="clientEdgeID" class="col-sm-2 control-label">ID</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="clientEdgeID" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientEdgeFrom" class="col-sm-2 control-label">From</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="clientEdgeFrom" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientEdgeTo" class="col-sm-2 control-label">To</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="clientEdgeTo" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientEdgeIP" class="col-sm-2 control-label">IP</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="clientEdgeIP" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientEdgeGateway" class="col-sm-2 control-label">Gateway</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="clientEdgeGateway" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button id="clientEdgeSave" type="submit" class="btn btn-default">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

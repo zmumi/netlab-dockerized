@@ -3,135 +3,14 @@
 <script src="{% static "lib/vis/vis.js" %}"></script>
 <link rel="stylesheet" href="{% static "configurator/style.css" %}"/>
 <link href="{% static "lib/vis/vis.css" %}" rel="stylesheet" type="text/css"/>
-
-
-<style type="text/css">
-    html, body {
-        font: 11pt arial;
-    }
-
-    h1 {
-        font-size: 150%;
-        margin: 5px 0;
-    }
-
-    h2 {
-        font-size: 100%;
-        margin: 5px 0;
-    }
-
-    table.view {
-        width: 100%;
-    }
-
-    table td {
-        vertical-align: top;
-    }
-
-    table table {
-        background-color: #f5f5f5;
-        border: 1px solid #e5e5e5;
-    }
-
-    table table td {
-        vertical-align: middle;
-    }
-
-    input[type=text], pre {
-        border: 1px solid lightgray;
-    }
-
-    pre {
-        margin: 0;
-        padding: 5px;
-        font-size: 10pt;
-    }
-
-    #network {
-        width: 100%;
-        height: 400px;
-        border: 1px solid lightgray;
-    }
-</style>
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+      crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
 
 <script type="text/javascript">
     var nodes, edges, network;
-
-    // convenience method to stringify a JSON object
-    function toJSON(obj) {
-        return JSON.stringify(obj, null, 4);
-    }
-
-    function addNode() {
-        try {
-            nodes.add({
-                id: document.getElementById('node-id').value,
-                label: document.getElementById('node-label').value,
-                properties: JSON.parse(document.getElementById('node-properties').value)
-            });
-        }
-        catch (err) {
-            alert(err);
-        }
-    }
-
-    function updateNode() {
-        try {
-            nodes.update({
-                id: document.getElementById('node-id').value,
-                label: document.getElementById('node-label').value,
-                properties: JSON.parse(document.getElementById('node-properties').value)
-            });
-        }
-        catch (err) {
-            alert(err);
-        }
-    }
-    function removeNode() {
-        try {
-            nodes.remove({id: document.getElementById('node-id').value});
-        }
-        catch (err) {
-            alert(err);
-        }
-    }
-
-    function addEdge() {
-        try {
-            edges.add({
-                id: document.getElementById('edge-id').value,
-                from: document.getElementById('edge-from').value,
-                to: document.getElementById('edge-to').value,
-                properties: JSON.parse(document.getElementById('edge-properties').value)
-            });
-        }
-        catch (err) {
-            alert(err);
-        }
-    }
-    function updateEdge() {
-        try {
-            edges.update({
-                id: document.getElementById('edge-id').value,
-                from: document.getElementById('edge-from').value,
-                to: document.getElementById('edge-to').value,
-                properties: JSON.parse(document.getElementById('edge-properties').value)
-            });
-        }
-        catch (err) {
-            alert(err);
-        }
-    }
-    function removeEdge() {
-        try {
-            edges.remove({id: document.getElementById('edge-id').value});
-        }
-        catch (err) {
-            alert(err);
-        }
-    }
-
     function draw() {
         // create an array with nodes
         nodes = new vis.DataSet();
@@ -230,7 +109,7 @@
                 }
             },
             {
-                id: 'client-2/lan10',
+                id: 'client-2/lan9',
                 from: 'client-2',
                 to: 'lan9',
                 properties: {
@@ -307,22 +186,89 @@
         network.on("doubleClick", function (params) {
             if (params.nodes[0]) {
                 var node = nodes.get(params.nodes[0]);
-                $('#node-id').val(node.id);
-                $('#node-label').val(node.label);
-                $('#node-properties').val(JSON.stringify(node.properties));
-            }
-            if (params.edges[0]) {
+                if (node.properties.type === 'client') {
+                    $('#clientNodeID').val(node.id);
+                    $('#clientNodeLabel').val(node.label);
+                    $('#clientNodeNetwork').val(node.properties.network);
+                    $('#clientNodeIP').val(node.properties.ip);
+                    $('#clientNodeGateway').val(node.properties.gateway);
+                    $('#clientNodeModal').modal('show')
+                } else {
+                    $('#routerNodeID').val(node.id);
+                    $('#routerNodeLabel').val(node.label);
+                    $('#routerNodeModal').modal('show')
+                }
+            } else if (params.edges[0]) {
                 var edge = edges.get(params.edges[0]);
-                $('#edge-id').val(edge.id);
-                $('#edge-from').val(edge.from);
-                $('#edge-to').val(edge.to);
-                $('#edge-properties').val(JSON.stringify(edge.properties));
+                if (edge.properties.type === 'client') {
+                    $('#clientEdgeID').val(edge.id);
+                    $('#clientEdgeFrom').val(edge.from);
+                    $('#clientEdgeTo').val(edge.to);
+                    $('#clientEdgeIP').val(edge.properties.ip);
+                    $('#clientEdgeGateway').val(edge.properties.gateway);
+                    $('#clientEdgeModal').modal('show')
+                } else {
+                    $('#routerEdgeID').val(edge.id);
+                    $('#routerEdgeFrom').val(edge.from);
+                    $('#routerEdgeTo').val(edge.to);
+                    $('#routerEdgeIP').val(edge.properties.ip);
+                    $('#routerEdgeModal').modal('show')
+                }
             }
         });
     }
 
     $(document).ready(draw);
     $(document).ready(function () {
+        $('#clientNodeSave').click(function () {
+            nodes.update({
+                id: $('#clientNodeID').val(),
+                label: $('#clientNodeLabel').val(),
+                properties: {
+                    network: $('#clientNodeNetwork').val(),
+                    ip: $('#clientNodeIP').val(),
+                    gateway: $('#clientNodeGateway').val(),
+                    type: "client"
+                }
+            });
+            $('#clientNodeModal').modal('hide')
+        });
+        $('#routerNodeSave').click(function () {
+            nodes.update({
+                id: $('#routerNodeID').val(),
+                label: $('#routerNodeLabel').val(),
+                properties: {
+                    type: "router"
+                }
+            });
+            $('#routerNodeModal').modal('hide')
+        });
+        $('#routerEdgeSave').click(function () {
+            edges.update({
+                id: $('#routerEdgeID').val(),
+                from: $('#routerEdgeFrom').val(),
+                to: $('#routerEdgeTo').val(),
+                properties: {
+                    ip: $('#routerEdgeIP').val(),
+                    type: "router"
+                }
+            });
+            $('#routerEdgeModal').modal('hide')
+        });
+        $('#clientEdgeSave').click(function () {
+            edges.update({
+                id: $('#clientEdgeID').val(),
+                from: $('#clientEdgeFrom').val(),
+                to: $('#clientEdgeTo').val(),
+                properties: {
+                    gateway: $('#clientEdgeGateway').val(),
+                    ip: $('#clientEdgeIP').val(),
+                    type: "client"
+                }
+            });
+            $('#clientEdgeModal').modal('hide')
+        });
+
         $("#generate").click(function () {
             $.post({
                 url: "configurator/generate",
@@ -343,86 +289,12 @@
     <button id="generate">Generate</button>
 </p>
 
-<h1>Adjust</h1>
-<table>
-    <tr>
-        <td>
-            <h2>Node</h2>
-            <table>
-                <tr>
-                    <td></td>
-                    <td><label for="node-id">Id</label></td>
-                    <td><input id="node-id" type="text" value="router-3"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><label for="node-label">Label</label></td>
-                    <td><input id="node-label" type="text" value="router-3"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><label for="node-properties">Properties</label></td>
-                    <td><textarea id="node-properties" style="height: 100px; width: 300px">{
-    "type": "router"
-}                    </textarea></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Action</td>
-                    <td>
-                        <button id="node-add" onclick="addNode();">Add</button>
-                        <button id="node-update" onclick="updateNode();">Update</button>
-                        <button id="node-remove" onclick="removeNode();">Remove</button>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        <td>
-            <h2>Edge</h2>
-            <table>
-                <tr>
-                    <td></td>
-                    <td><label for="edge-id">Id</label></td>
-                    <td><input id="edge-id" type="text" value="router-3/lan9"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><label for="edge-from">From</label></td>
-                    <td><input id="edge-from" type="text" value="router-3"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><label for="edge-to">To</label></td>
-                    <td><input id="edge-to" type="text" value="lan7"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><label for="edge-properties">Properties</label></td>
-                    <td><textarea id="edge-properties" style="height: 100px; width: 300px">{
-    "type": "router",
-    "ip": "7.1.0.103"
-}                    </textarea></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Action</td>
-                    <td>
-                        <button id="edge-add" onclick="addEdge();">Add</button>
-                        <button id="edge-update" onclick="updateEdge();">Update</button>
-                        <button id="edge-remove" onclick="removeEdge();">Remove</button>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
+{% include "modals.html" %}
+<div id="network" style="height: 800px"></div>
 
-</table>
-
-<h1>View</h1>
-<table class="view">
+<table class="view" style="width: 100%">
     <colgroup>
-        <col width="25%">
-        <col width="25%">
+        <col width="50%">
         <col width="50%">
     </colgroup>
     <tr>
@@ -435,12 +307,8 @@
             <h2>Edges</h2>
             <pre id="edges"></pre>
         </td>
-
-        <td>
-            <h2>Network</h2>
-
-            <div id="network"></div>
-        </td>
     </tr>
 </table>
+
+
 
