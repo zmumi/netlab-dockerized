@@ -193,6 +193,11 @@
                     $('#clientNodeIP').val(node.properties.ip);
                     $('#clientNodeGateway').val(node.properties.gateway);
                     $('#clientNodeModal').modal('show')
+                } else if (node.properties.type === 'lan') {
+                    $('#lanNodeID').val(node.id);
+                    $('#lanNodeLabel').val(node.label);
+                    $('#lanNodeSubnet').val(node.properties.subnet);
+                    $('#lanNodeModal').modal('show')
                 } else {
                     $('#routerNodeID').val(node.id);
                     $('#routerNodeLabel').val(node.label);
@@ -220,6 +225,17 @@
 
     $(document).ready(draw);
     $(document).ready(function () {
+        $('#lanNodeSave').click(function () {
+            nodes.update({
+                id: $('#lanNodeID').val(),
+                label: $('#lanNodeLabel').val(),
+                properties: {
+                    subnet: $('#clientNodeSubnet').val(),
+                    type: "lan"
+                }
+            });
+            $('#lanNodeModal').modal('hide')
+        });
         $('#clientNodeSave').click(function () {
             nodes.update({
                 id: $('#clientNodeID').val(),
