@@ -108,6 +108,26 @@
 
     $(document).ready(draw);
     $(document).ready(function () {
+        $('#lanNodeDelete').click(function () {
+            nodes.remove($('#lanNodeID').val());
+            $('#lanNodeModal').modal('hide')
+        });
+        $('#clientNodeDelete').click(function () {
+            nodes.remove($('#clientNodeID').val());
+            $('#clientNodeModal').modal('hide')
+        });
+        $('#routerNodeDelete').click(function () {
+            nodes.remove($('#routerNodeID').val());
+            $('#routerNodeModal').modal('hide')
+        });
+        $('#clientEdgeDelete').click(function () {
+            edges.remove($('#clientEdgeID').val());
+            $('#clientEdgeModal').modal('hide')
+        });
+        $('#routerEdgeDelete').click(function () {
+            edges.remove($('#routerEdgeID').val());
+            $('#routerEdgeModal').modal('hide')
+        });
         $('#lanNodeSave').click(function () {
             nodes.update({
                 id: $('#lanNodeID').val(),
@@ -242,6 +262,18 @@
                     <a id="set_design" href="#" onclick="$('#design_file').click()">Set design</a>
                     <input type="file" name="design_file" id="design_file" style="display: none"/>
                 </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Add<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-toggle="modal" data-target="#routerNodeModal">router</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#clientNodeModal">client</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#lanNodeModal">lan</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#" data-toggle="modal" data-target="#routerEdgeModal">router link</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#clientEdgeModal">client link</a></li>
+                    </ul>
                 <li><a id="get_project" href="#">Get project</a></li>
                 <li><a id="run" href="#">Run project</a></li>
             </ul>
