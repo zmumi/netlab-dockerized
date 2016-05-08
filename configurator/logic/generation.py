@@ -6,7 +6,10 @@ def run(nodes, edges, template_loader, dir="."):
     params = data_as_context(edges, nodes)
 
     print params
+    print nodes
+    print edges
 
+    _render('design.json', {'nodes': nodes, 'edges': edges}, dir + '/design.json', template_loader)
     _render('docker-compose.yml', params, dir + '/docker-compose.yml', template_loader)
     _render('up.sh', params, dir + '/up.sh', template_loader)
 

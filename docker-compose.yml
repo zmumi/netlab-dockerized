@@ -1,0 +1,16 @@
+version: '2'
+services:
+  web:
+    build: .
+    privileged: true
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose
+      - /lib/x86_64-linux-gnu/libapparmor.so.1:/lib/x86_64-linux-gnu/libapparmor.so.1
+      - /lib/x86_64-linux-gnu/libseccomp.so.2:/lib/x86_64-linux-gnu/libseccomp.so.2
+      - /lib/x86_64-linux-gnu/libdevmapper.so.1.02.1:/lib/x86_64-linux-gnu/libdevmapper.so.1.02.1
+    ports:
+      - "8000:8000"

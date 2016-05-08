@@ -3,7 +3,7 @@ version: '2'
 services:
   {% for client_name, params in clients.items() %}
   {{client_name}}:
-    image: ubuntu
+    image: ubuntu:14.04
     privileged: true
     mem_limit: 100m
     hostname: {{client_name}}
@@ -28,8 +28,6 @@ services:
     image: zmumichal/vyos
     privileged: true
     mem_limit: 200m
-    volumes:
-      - .:/injected
     command: sbin/init
     networks:
       service:
