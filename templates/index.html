@@ -295,7 +295,18 @@
                     edges: JSON.stringify(edges.get())
                 }
             })
-        })
+        });
+        $("#run").click(function () {
+            $.post({
+                url: "configurator/run",
+                dataType: "json",
+                data: {
+                    csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
+                    nodes: JSON.stringify(nodes.get()),
+                    edges: JSON.stringify(edges.get())
+                }
+            })
+        });
     })
 </script>
 
@@ -303,6 +314,7 @@
     Double-click on element to edit it.
     {% csrf_token %}
     <button id="generate">Generate</button>
+    <button id="run">Run</button>
 </p>
 
 {% include "modals.html" %}
