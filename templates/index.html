@@ -285,37 +285,55 @@
             $('#clientEdgeModal').modal('hide')
         });
 
+        function getData() {
+            return {
+                csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
+                nodes: JSON.stringify(nodes.get()),
+                edges: JSON.stringify(edges.get())
+            }
+        }
+
         $("#generate").click(function () {
             $.post({
                 url: "configurator/generate",
                 dataType: "json",
-                data: {
-                    csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
-                    nodes: JSON.stringify(nodes.get()),
-                    edges: JSON.stringify(edges.get())
-                }
+                data: getData(),
             })
         });
         $("#run").click(function () {
             $.post({
                 url: "configurator/run",
                 dataType: "json",
-                data: {
-                    csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
-                    nodes: JSON.stringify(nodes.get()),
-                    edges: JSON.stringify(edges.get())
-                }
+                data: getData()
+            })
+        });
+
+        $("#get_design").click(function () {
+            $.post({
+                url: "configurator/generate",
+                dataType: "json",
+                data: getData()
+            }).done(function () {
+                window.open('configurator/get_design', '_blank');
             })
         });
     })
 </script>
 
-<p>
-    Double-click on element to edit it.
+<nav class="navbar navbar-default">
     {% csrf_token %}
-    <button id="generate">Generate</button>
-    <button id="run">Run</button>
-</p>
+    <div class="container">
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a id="generate" href="#">Generate</a></li>
+                <li><a id="run" href="#">Run</a></li>
+                <li><a id="get_design" href="#">Get design</a></li>
+                <li><a id="set_design" href="#">Set design</a></li>
+                <li><a id="get_project" href="#">Get project</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
 {% include "modals.html" %}
 <div id="network" style="height: 800px"></div>

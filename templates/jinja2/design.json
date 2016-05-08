@@ -1,0 +1,20 @@
+{
+  "nodes": [
+    {% for node in nodes %}{
+    {% for prop, val in node.properties.items() %}
+      "{{prop}}": "{{val}}",
+    {% endfor %}
+      "name": "{{node.id}}"
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ],
+  "edges": [
+    {% for edge in edges %}{
+    {% for prop, val in edge.properties.items() %}
+      "{{prop}}": "{{val}}",
+    {% endfor %}
+      "name": "{{edge.id}}"
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
