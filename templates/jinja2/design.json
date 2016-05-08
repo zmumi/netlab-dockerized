@@ -4,7 +4,7 @@
     {% for prop, val in node.properties.items() %}
       "{{prop}}": "{{val}}",
     {% endfor %}
-      "name": "{{node.id}}"
+      "id": "{{node.id}}"
     }{% if not loop.last %},{% endif %}
     {% endfor %}
   ],
@@ -13,7 +13,9 @@
     {% for prop, val in edge.properties.items() %}
       "{{prop}}": "{{val}}",
     {% endfor %}
-      "name": "{{edge.id}}"
+      "id": "{{edge.id}}",
+      "from": "{{edge.from}}",
+      "to": "{{edge.to}}"
     }{% if not loop.last %},{% endif %}
     {% endfor %}
   ]

@@ -10,169 +10,52 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
 
 <script type="text/javascript">
+    function color_nodes(items) {
+        var colors = {
+            router: {
+                border: '#2B7CE9',
+                background: '#D2E5FF'
+            },
+            client: {
+                border: 'lightgray',
+                background: 'lightgray',
+                highlight: {
+                    border: 'gray',
+                    background: 'lightgray'
+                }
+            },
+            lan: 'white'
+        };
+        items.forEach(function (id) {
+            var node = nodes.get(id);
+            if (!node.color) {
+                node['color'] = colors[node.properties.type]
+                nodes.update(node)
+            }
+        });
+    }
+
+    /* GLOBALS */
     var nodes, edges, network;
     function draw() {
+
+        {% include "initial_data.js" %}
+
         // create an array with nodes
         nodes = new vis.DataSet();
-        nodes.on('*', function () {
+        nodes.on('*', function (kind, event) {
+            if (kind != 'remove')color_nodes(event.items);
             document.getElementById('nodes').innerHTML = JSON.stringify(nodes.get(), null, 4);
         });
-        nodes.add([
-            {
-                id: 'client-1',
-                label: 'client-1',
-                properties: {
-                    type: 'client',
-                    'network': 'lan10',
-                    'ip': '10.1.0.44',
-                    'gateway': '10.1.0.101'
-                },
-                color: 'lightgray'
-            },
-            {
-                id: 'client-2',
-                label: 'client-2',
-                properties: {
-                    type: 'client',
-                    'network': 'lan9',
-                    'ip': '9.1.0.44',
-                    'gateway': '9.1.0.102'
-                },
-                color: 'lightgray'
-            },
-            {
-                id: 'router-1',
-                label: 'router-1',
-                properties: {
-                    type: 'router'
-                }
-            },
-            {
-                id: 'router-2',
-                label: 'router-2',
-                properties: {
-                    type: 'router'
-                }
-            },
-            {
-                id: 'lan10',
-                label: 'lan10',
-                properties: {
-                    type: 'lan',
-                    subnet: '10.1.0.0/16'
-                },
-                color: 'white'
-            },
-            {
-                id: 'lan9',
-                label: 'lan9',
-                properties: {
-                    type: 'lan',
-                    subnet: '9.1.0.0/16'
-                },
-                color: 'white'
-            },
-            {
-                id: 'lan8',
-                label: 'lan8',
-                properties: {
-                    type: 'lan',
-                    subnet: '8.1.0.0/16'
-                },
-                color: 'white'
-            },
-            {
-                id: 'lan7',
-                label: 'lan7',
-                properties: {
-                    type: 'lan',
-                    subnet: '7.1.0.0/16'
-                },
-                color: 'white'
-            },
-        ]);
+        nodes.add(initial_nodes);
+
 
         // create an array with edges
         edges = new vis.DataSet();
         edges.on('*', function () {
             document.getElementById('edges').innerHTML = JSON.stringify(edges.get(), null, 4);
         });
-        edges.add([
-            {
-                id: 'client-1/lan10',
-                from: 'client-1',
-                to: 'lan10',
-                properties: {
-                    type: 'client',
-                    'ip': '10.1.0.44',
-                    'gateway': '10.1.0.101'
-                }
-            },
-            {
-                id: 'client-2/lan9',
-                from: 'client-2',
-                to: 'lan9',
-                properties: {
-                    type: 'client',
-                    'ip': '9.1.0.44',
-                    'gateway': '9.1.0.102'
-                }
-            },
-            {
-                id: 'router-1/lan10',
-                from: 'router-1',
-                to: 'lan10',
-                properties: {
-                    type: 'router',
-                    'ip': '10.1.0.101'
-                }
-            },
-            {
-                id: 'router-1/lan8',
-                from: 'router-1',
-                to: 'lan8',
-                properties: {
-                    type: 'router',
-                    'ip': '8.1.0.101'
-                }
-            },
-            {
-                id: 'router-1/lan7',
-                from: 'router-1',
-                to: 'lan7',
-                properties: {
-                    type: 'router',
-                    'ip': '7.1.0.101'
-                }
-            },
-            {
-                id: 'router-2/lan9',
-                from: 'router-2',
-                to: 'lan9',
-                properties: {
-                    type: 'router',
-                    'ip': '9.1.0.102'
-                }
-            },
-            {
-                id: 'router-2/lan8',
-                from: 'router-2',
-                to: 'lan8',
-                properties: {
-                    type: 'router',
-                    'ip': '8.1.0.102'
-                }
-            },
-            {
-                id: 'router-2/lan7',
-                from: 'router-2',
-                to: 'lan7',
-                properties: {
-                    type: 'router',
-                    'ip': '7.1.0.102'
-                }
-            },
-        ]);
+        edges.add(initial_edges);
 
         // create a network
         var container = document.getElementById('network');
@@ -331,7 +214,17 @@
             }).done(function () {
                 location.reload();
             });
+        });
 
+        $("#reset_design").click(function () {
+            $.post({
+                url: "configurator/reset_design",
+                data: {
+                    csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+                }
+            }).done(function () {
+                location.reload();
+            });
         });
     })
 
@@ -342,14 +235,15 @@
     <div class="container">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a id="generate" href="#">Generate</a></li>
-                <li><a id="run" href="#">Run</a></li>
+                <li><a id="generate" href="#">Save design</a></li>
                 <li><a id="get_design" href="#">Get design</a></li>
-                <li><a id="get_project" href="#">Get project</a></li>
+                <li><a id="reset_design" href="#">Reset design</a></li>
                 <li>
                     <a id="set_design" href="#" onclick="$('#design_file').click()">Set design</a>
                     <input type="file" name="design_file" id="design_file" style="display: none"/>
                 </li>
+                <li><a id="get_project" href="#">Get project</a></li>
+                <li><a id="run" href="#">Run project</a></li>
             </ul>
         </div>
     </div>
