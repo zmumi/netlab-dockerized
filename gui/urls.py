@@ -16,5 +16,5 @@ Including another URLconf
 from django.conf.urls import include, url
 
 urlpatterns = [
-    url(r'^configurator', include('configurator.urls')),
+    url(r'^', include('configurator.urls')),
 ]

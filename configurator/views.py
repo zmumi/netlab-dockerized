@@ -17,5 +17,5 @@ def generate(request):
     nodes = json.loads(request.POST['nodes'])
     print edges
     print nodes
-    generation.run(nodes, edges, loader)
+    generation.run(nodes, edges, loader, 'out')
     return HttpResponse()
