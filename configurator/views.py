@@ -1,11 +1,11 @@
 import json
 import subprocess
 
+from django.forms import forms
 from django.http import HttpResponse
 from django.template import loader
 from django.utils.encoding import smart_str
 from configurator.logic import generation
-
 
 def index(request):
     template = loader.get_template('index.html')
@@ -25,6 +25,11 @@ def get_design(request):
     response = HttpResponse(content, content_type='application/force-download')
     response['Content-Disposition'] = 'attachment; filename=%s' % smart_str('design.json')
     return response
+
+
+def set_design(request):
+    print request.FILES['design_file'].file.read()
+    return HttpResponse('{"result":"ok"}')
 
 
 def run(request):

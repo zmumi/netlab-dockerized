@@ -317,7 +317,24 @@
                 window.open('configurator/get_design', '_blank');
             })
         });
+        $('#design_file').on('change', function () {
+            var formData = new FormData();
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            formData.append('design_file', $('#design_file')[0].files[0]);
+            $.ajax({
+                url: "configurator/set_design",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST'
+            }).done(function () {
+                location.reload();
+            });
+
+        });
     })
+
 </script>
 
 <nav class="navbar navbar-default">
@@ -328,8 +345,11 @@
                 <li><a id="generate" href="#">Generate</a></li>
                 <li><a id="run" href="#">Run</a></li>
                 <li><a id="get_design" href="#">Get design</a></li>
-                <li><a id="set_design" href="#">Set design</a></li>
                 <li><a id="get_project" href="#">Get project</a></li>
+                <li>
+                    <a id="set_design" href="#" onclick="$('#design_file').click()">Set design</a>
+                    <input type="file" name="design_file" id="design_file" style="display: none"/>
+                </li>
             </ul>
         </div>
     </div>
