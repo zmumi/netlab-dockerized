@@ -3,7 +3,6 @@ services:
   web:
     build: .
     privileged: true
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
       - /var/run/docker.sock:/var/run/docker.sock
