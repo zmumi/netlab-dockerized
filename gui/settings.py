@@ -55,11 +55,11 @@ ROOT_URLCONF = 'gui.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [os.path.join(BASE_DIR, 'templates/jinja2')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates/generation')]
     },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates/web')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {

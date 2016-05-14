@@ -1,13 +1,11 @@
 {% load staticfiles %}
-<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="{% static "lib/jquery-1.12.0.min.js" %}"></script>
 <script src="{% static "lib/vis/vis.js" %}"></script>
-<link rel="stylesheet" href="{% static "configurator/style.css" %}"/>
 <link href="{% static "lib/vis/vis.css" %}" rel="stylesheet" type="text/css"/>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-      crossorigin="anonymous">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-      crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="{% static "lib/bootstrap.min.css" %}" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static "lib/bootstrap-theme.min.css" %}" crossorigin="anonymous">
+<script src="{% static "lib/bootstrap.min.js" %}" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="{% static "configurator/style.css" %}"/>
 
 <script type="text/javascript">
     function color_nodes(items) {
