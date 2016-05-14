@@ -1,11 +1,11 @@
 import json
 import subprocess
-
 from django.http import HttpResponse
 from django.template import loader
 from django.utils.encoding import smart_str
 from configurator.logic import generation
 import shutil
+
 
 def index(request):
     template = loader.get_template('index.html')
@@ -43,9 +43,21 @@ def run(request):
     edges = json.loads(request.POST['edges'])
     nodes = json.loads(request.POST['nodes'])
     generation.run(nodes, edges, loader, 'out')
-    res = subprocess.Popen("cd out && chmod a+x up.sh && ./up.sh", shell=True, stdout=subprocess.PIPE).stdout.read()
-    print res  # todo: handle
-    return HttpResponse('{"result":"ok"}')
+    cmd = "cd out && chmod a+x up.sh && ./up.sh"
+    popen = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    result = {'result': 'ok', 'stdout': popen.stdout.read(), 'stderr': popen.stderr.read()}
+    print 'RUN stdout:', result['stdout']
+    print 'RUN stdout:', result['stderr']
+    return HttpResponse(json.dumps(result))
+
+
+def stop(request):
+    cmd = "cd out && docker-compose stop -t 2 && docker-compose rm -vf"
+    popen = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    result = {'result': 'ok', 'stdout': popen.stdout.read(), 'stderr': popen.stderr.read()}
+    print 'STOP stdout:', result['stdout']
+    print 'STOP stdout:', result['stderr']
+    return HttpResponse(json.dumps(result))
 
 
 def _load_design():

@@ -27,7 +27,7 @@
         items.forEach(function (id) {
             var node = nodes.get(id);
             if (!node.color) {
-                node['color'] = colors[node.properties.type]
+                node['color'] = colors[node.properties.type];
                 nodes.update(node)
             }
         });
@@ -198,14 +198,27 @@
             $.post({
                 url: "configurator/generate",
                 dataType: "json",
-                data: getData(),
+                data: getData()
             })
         });
         $("#run").click(function () {
+            $('#runModal').modal('show');
             $.post({
                 url: "configurator/run",
                 dataType: "json",
                 data: getData()
+            }).done(function (result) {
+                $('#runModal').modal('hide');
+            })
+        });
+        $("#stop").click(function () {
+            $('#stopModal').modal('show');
+            $.post({
+                url: "configurator/stop",
+                dataType: "json",
+                data: {csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()}
+            }).done(function (result) {
+                $('#stopModal').modal('hide');
             })
         });
 
@@ -248,6 +261,43 @@
 
 </script>
 
+<div class="modal" id="runModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Run your configuration</h4>
+            </div>
+            <div class="modal-body">
+                <div id="runProgress" class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"
+                         aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                        Working..
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="stopModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Stopping running containers</h4>
+            </div>
+            <div class="modal-body">
+                <div id="runProgress" class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"
+                         aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                        Working..
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <nav class="navbar navbar-default">
     {% csrf_token %}
     <div class="container">
@@ -274,6 +324,7 @@
                     </ul>
                 <li><a id="get_project" href="#">Get project</a></li>
                 <li><a id="run" href="#">Run project</a></li>
+                <li><a id="stop" href="#">Stop running</a></li>
             </ul>
         </div>
     </div>

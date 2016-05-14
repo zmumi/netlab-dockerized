@@ -1,7 +1,7 @@
 #!/bin/bash
 
 docker-compose up -d
-sleep 5
+sleep 3
 
 {% for router_name, params in routers.items() %}
 #############################
