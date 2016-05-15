@@ -1,17 +1,11 @@
 {
   "nodes": [
     {
-      "ip": "10.1.0.44",
       "type": "client",
-      "network": "lan10",
-      "gateway": "10.1.0.101",
       "id": "client-1"
     },
     {
-      "ip": "9.1.0.44",
       "type": "client",
-      "network": "lan9",
-      "gateway": "9.1.0.102",
       "id": "client-2"
     },
     {

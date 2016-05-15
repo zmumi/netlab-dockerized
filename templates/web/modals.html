@@ -15,7 +15,8 @@
                         <label for="lanNodeSubnet" class="col-sm-2 control-label">Subnet</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="lanNodeSubnet" placeholder="" required pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}/(?:\d|[12]\d|3[01])$">
+                            <input type="text" class="form-control" id="lanNodeSubnet" placeholder="" required
+                                   pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}/(?:\d|[12]\d|3[01])$">
                         </div>
                     </div>
 
@@ -99,21 +100,21 @@
                         <label for="routerEdgeFrom" class="col-sm-2 control-label">From</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="routerEdgeFrom" placeholder="">
+                            <select class="form-control" id="routerEdgeFrom"> </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="routerEdgeTo" class="col-sm-2 control-label">To</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="routerEdgeTo" placeholder="">
+                            <select class="form-control" id="routerEdgeTo"> </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="routerEdgeIP" class="col-sm-2 control-label">IP</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="routerEdgeIP" placeholder="">
+                            <input type="text" class="form-control" id="routerEdgeIP" placeholder="" required pattern="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$">
                         </div>
                     </div>
 
@@ -144,30 +145,28 @@
                     </div>
                     <div class="form-group">
                         <label for="clientEdgeFrom" class="col-sm-2 control-label">From</label>
-
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="clientEdgeFrom" placeholder="">
+                            <select class="form-control" id="clientEdgeFrom"> </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="clientEdgeTo" class="col-sm-2 control-label">To</label>
-
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="clientEdgeTo" placeholder="">
+                            <select class="form-control" id="clientEdgeTo"> </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="clientEdgeIP" class="col-sm-2 control-label">IP</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="clientEdgeIP" placeholder="">
+                            <input type="text" class="form-control" id="clientEdgeIP" placeholder="" required pattern="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="clientEdgeGateway" class="col-sm-2 control-label">Gateway</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="clientEdgeGateway" placeholder="">
+                            <input type="text" class="form-control" id="clientEdgeGateway" placeholder="" required pattern="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$">
                         </div>
                     </div>
 
