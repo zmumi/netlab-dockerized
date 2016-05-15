@@ -129,7 +129,7 @@
         $('#lanNodeSave').click(function () {
             nodes.update({
                 id: $('#lanNodeID').val(),
-                label: $('#lanNodeLabel').val(),
+                label: $('#lanNodeID').val(),
                 properties: {
                     subnet: $('#clientNodeSubnet').val(),
                     type: "lan"
@@ -140,7 +140,7 @@
         $('#clientNodeSave').click(function () {
             nodes.update({
                 id: $('#clientNodeID').val(),
-                label: $('#clientNodeLabel').val(),
+                label: $('#clientNodeID').val(),
                 properties: {
                     network: $('#clientNodeNetwork').val(),
                     ip: $('#clientNodeIP').val(),
@@ -153,7 +153,7 @@
         $('#routerNodeSave').click(function () {
             nodes.update({
                 id: $('#routerNodeID').val(),
-                label: $('#routerNodeLabel').val(),
+                label: $('#routerNodeID').val(),
                 properties: {
                     type: "router"
                 }

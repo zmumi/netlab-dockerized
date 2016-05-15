@@ -21,13 +21,7 @@ def data_as_context(edges, nodes):
     }
     for node in nodes:
         properties = node['properties']
-        if properties['type'] == 'client':
-            params['clients'][node['id']] = {
-                'network': properties['network'],
-                'ip': properties['ip'],
-                'gateway': properties['gateway'],
-            }
-        elif properties['type'] == 'router':
+        if properties['type'] == 'router':
             params['routers'][node['id']] = {
                 'networks': {}
             }
@@ -49,6 +43,16 @@ def data_as_context(edges, nodes):
                 'ipv4': properties['ip'],
                 'mac': predict_mac_address(properties),
                 'mask': str(parsed.prefixlen)
+            }
+        if properties['type'] == 'client':
+            client_id = edge['from']
+            network_id = edge['to']
+            client_ip = properties['ip']
+            client_gateway = properties['gateway']
+            params['clients'][client_id] = {
+                'network': network_id,
+                'ip': client_ip,
+                'gateway': client_gateway
             }
 
     return params
