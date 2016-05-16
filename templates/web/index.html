@@ -9,7 +9,7 @@
 
 <script type="text/javascript">
 
- /* GLOBALS */
+    /* GLOBALS */
     var nodes, edges, network;
 
 
@@ -38,7 +38,7 @@
         });
     }
 
-     function getRouters(){
+    function getRouters() {
         var routers = [];
         var tmpNodes = nodes.get();
         for (var node in tmpNodes) {
@@ -49,7 +49,7 @@
         return routers;
     }
 
-    function getClients(){
+    function getClients() {
         var clients = [];
         var tmpNodes = nodes.get();
         for (var node in tmpNodes) {
@@ -60,10 +60,10 @@
         return clients;
     }
 
-    function getLans(){
+    function getLans() {
         var lans = [];
         var tmpNodes = nodes.get();
-        for (node in tmpNodes) {
+        for (var node in tmpNodes) {
             if (tmpNodes[node].properties.type === 'lan') {
                 lans.push(tmpNodes[node].id);
             }
@@ -71,23 +71,23 @@
         return lans;
     }
 
-    function setSelectionsRouterLan(){
+    function setSelectionsRouterLan() {
         var routers = getRouters();
         var lans = getLans();
-         $('#routerEdgeIP').empty();
+        $('#routerEdgeIP').empty();
         $('#routerEdgeID').empty();
         $('#routerEdgeFrom').empty();
         $('#routerEdgeTo').empty();
-        $(routers).each(function(i, v){
-            $('#routerEdgeFrom').append($("<option>", { value: v, html: v }));
+        $(routers).each(function (i, v) {
+            $('#routerEdgeFrom').append($("<option>", {value: v, html: v}));
         });
 
-        $(lans).each(function(i, v){
-             $('#routerEdgeTo').append($("<option>", { value: v, html: v }));
+        $(lans).each(function (i, v) {
+            $('#routerEdgeTo').append($("<option>", {value: v, html: v}));
         });
     }
 
-     function setSelectionsClientLan(){
+    function setSelectionsClientLan() {
         var clients = getClients();
         var lans = getLans();
         $('#clientEdgeID').empty();
@@ -95,12 +95,12 @@
         $('#clientEdgeGateway').empty();
         $('#clientEdgeFrom').empty();
         $('#clientEdgeTo').empty();
-        $(clients).each(function(i, v){
-            $('#clientEdgeFrom').append($("<option>", { value: v, html: v }));
+        $(clients).each(function (i, v) {
+            $('#clientEdgeFrom').append($("<option>", {value: v, html: v}));
         });
 
-        $(lans).each(function(i, v){
-             $('#clientEdgeTo').append($("<option>", { value: v, html: v }));
+        $(lans).each(function (i, v) {
+            $('#clientEdgeTo').append($("<option>", {value: v, html: v}));
         });
     }
 
@@ -133,7 +133,6 @@
         };
         var options = {};
         network = new vis.Network(container, data, options);
-
 
 
         network.on("doubleClick", function (params) {
@@ -176,12 +175,24 @@
     $(document).ready(draw);
     $(document).ready(function () {
 
+        $('#routerEdgeModal').on('show.bs.modal', function () {
+            var idField = $('#routerEdgeID');
+            idField.val(idField.val() || Math.random().toString(36));
+        });
+
+        $('#clientEdgeModal').on('show.bs.modal', function () {
+            var idField = $('#clientEdgeID');
+            idField.val(idField.val() || Math.random().toString(36));
+        });
+
         $('#routerLinkCreate').click(function () {
+            $('#routerEdgeModal input').val('');
             setSelectionsRouterLan();
             $('#routerEdgeModal').modal('show')
         });
 
-         $('#clientLinkCreate').click(function () {
+        $('#clientLinkCreate').click(function () {
+            $('#clientEdgeModal input').val('');
             setSelectionsClientLan();
             $('#clientEdgeModal').modal('show')
         });
@@ -265,7 +276,6 @@
             });
             $('#clientEdgeModal').modal('hide')
         });
-
 
 
         function getData() {
