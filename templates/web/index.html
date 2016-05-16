@@ -41,24 +41,22 @@
      function getRouters(){
         var routers = [];
         var tmpNodes = nodes.get();
-        for (node in tmpNodes) {
+        for (var node in tmpNodes) {
             if (tmpNodes[node].properties.type === 'router') {
                 routers.push(tmpNodes[node].id);
             }
         }
-        console.log(routers);
         return routers;
     }
 
     function getClients(){
         var clients = [];
         var tmpNodes = nodes.get();
-        for (node in tmpNodes) {
+        for (var node in tmpNodes) {
             if (tmpNodes[node].properties.type === 'client') {
                 clients.push(tmpNodes[node].id);
             }
         }
-        console.log(clients);
         return clients;
     }
 
@@ -70,13 +68,12 @@
                 lans.push(tmpNodes[node].id);
             }
         }
-        console.log(lans);
         return lans;
     }
 
     function setSelectionsRouterLan(){
-        routers = getRouters();
-        lans = getLans();
+        var routers = getRouters();
+        var lans = getLans();
          $('#routerEdgeIP').empty();
         $('#routerEdgeID').empty();
         $('#routerEdgeFrom').empty();
@@ -91,8 +88,8 @@
     }
 
      function setSelectionsClientLan(){
-        clients = getClients();
-        lans = getLans();
+        var clients = getClients();
+        var lans = getLans();
         $('#clientEdgeID').empty();
         $('#clientEdgeIP').empty();
         $('#clientEdgeGateway').empty();
