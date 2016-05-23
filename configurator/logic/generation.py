@@ -8,6 +8,7 @@ def run(nodes, edges, template_loader, dir="."):
     _render('design.json', {'nodes': nodes, 'edges': edges}, dir + '/design.json', template_loader)
     _render('docker-compose.yml', params, dir + '/docker-compose.yml', template_loader)
     _render('up.sh', params, dir + '/up.sh', template_loader)
+    _render('Dockerfile', params, dir + '/Dockerfile', template_loader)
 
     for (router, router_params) in params['routers'].items():
         _render('config.boot', router_params, dir + '/' + router + '-config.boot', template_loader)

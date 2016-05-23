@@ -3,18 +3,11 @@ version: '2'
 services:
   {% for client_name, params in clients.items() %}
   {{client_name}}:
-    image: ubuntu:14.04
+    build: .
     privileged: true
     mem_limit: 100m
     hostname: {{client_name}}
     container_name: {{client_name}}
-    command: /bin/bash -c "
-      route del default;
-      route add default gw {{ params['gateway'] }} eth0;
-      route;
-
-      rsyslogd;
-      tail -f /var/log/syslog"
     networks:
       service:
       {{ params['network'] }}:

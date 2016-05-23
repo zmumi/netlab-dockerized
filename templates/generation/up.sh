@@ -3,6 +3,14 @@
 docker-compose up -d
 sleep 3
 
+{% for client_name, params in clients.items() %}
+#############################
+###### {{client_name}} ######
+#############################
+
+docker exec {{client_name}} /bin/bash -c "route del default;route add default gw {{ params['gateway'] }} eth0; route"
+{% endfor %}
+
 {% for router_name, params in routers.items() %}
 #############################
 ###### {{router_name}} ######
