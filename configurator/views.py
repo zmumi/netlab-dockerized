@@ -27,6 +27,13 @@ def get_design(request):
     return response
 
 
+def get_project(request):
+    content = open('out/project.zip').read()
+    response = HttpResponse(content, content_type='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename=%s' % smart_str('project.zip')
+    return response
+
+
 def set_design(request):
     design = request.FILES['design_file'].file.read()
     with open('out/design.json', 'w') as design_file:

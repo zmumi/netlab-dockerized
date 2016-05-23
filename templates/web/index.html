@@ -323,6 +323,15 @@
                 window.open('configurator/get_design', '_blank');
             })
         });
+        $("#get_project").click(function () {
+            $.post({
+                url: "configurator/generate",
+                dataType: "json",
+                data: getData()
+            }).done(function () {
+                window.open('configurator/get_project', '_blank');
+            })
+        });
         $('#design_file').on('change', function () {
             var formData = new FormData();
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');

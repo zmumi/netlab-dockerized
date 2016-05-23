@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import ipaddress
+import os
+import zipfile
 
 
 def run(nodes, edges, template_loader, dir="."):
     params = data_as_context(edges, nodes)
+    _clean_dir(dir)
 
     _render('design.json', {'nodes': nodes, 'edges': edges}, dir + '/design.json', template_loader)
     _render('docker-compose.yml', params, dir + '/docker-compose.yml', template_loader)
@@ -12,6 +15,20 @@ def run(nodes, edges, template_loader, dir="."):
 
     for (router, router_params) in params['routers'].items():
         _render('config.boot', router_params, dir + '/' + router + '-config.boot', template_loader)
+
+    _zip_project(dir)
+
+
+def _zip_project(dir):
+    for root, dirs, files in os.walk(dir):
+        with zipfile.ZipFile(dir + "/project.zip", "w", zipfile.ZIP_DEFLATED) as ziph:
+            for file in [f for f in files if f != "project.zip" and not f.endswith(".template")]:
+                ziph.write(os.path.join(root, file))
+
+
+def _clean_dir(dir):
+    for f in [dir + '/' + f for f in os.listdir(dir) if f.endswith(".boot")]:
+        os.remove(f)
 
 
 def data_as_context(edges, nodes):
