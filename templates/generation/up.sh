@@ -1,7 +1,7 @@
 #!/bin/bash
 
 docker-compose up -d
-sleep 3
+sleep 10
 
 {% for client_name, params in clients.items() %}
 #############################
