@@ -112,17 +112,15 @@
         // create an array with nodes
         nodes = new vis.DataSet();
         nodes.on('*', function (kind, event) {
-            if (kind != 'remove')color_nodes(event.items);
-            document.getElementById('nodes').innerHTML = JSON.stringify(nodes.get(), null, 4);
+            if (kind != 'remove'){
+                color_nodes(event.items);
+            }
         });
         nodes.add(initial_nodes);
 
 
         // create an array with edges
         edges = new vis.DataSet();
-        edges.on('*', function () {
-            document.getElementById('edges').innerHTML = JSON.stringify(edges.get(), null, 4);
-        });
         edges.add(initial_edges);
 
         // create a network
@@ -311,7 +309,7 @@
                 url: "configurator/run",
                 dataType: "json",
                 data: getData()
-            }).done(function (result) {
+            }).done(function () {
                 $('#runModal').modal('hide');
             })
         });
@@ -446,24 +444,6 @@
 
 {% include "modals.html" %}
 <div id="network" style="height: 800px"></div>
-
-<table class="view" style="width: 100%">
-    <colgroup>
-        <col width="50%">
-        <col width="50%">
-    </colgroup>
-    <tr>
-        <td>
-            <h2>Nodes</h2>
-            <pre id="nodes"></pre>
-        </td>
-
-        <td>
-            <h2>Edges</h2>
-            <pre id="edges"></pre>
-        </td>
-    </tr>
-</table>
 
 
 
