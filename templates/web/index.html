@@ -291,6 +291,18 @@
                 url: "configurator/generate",
                 dataType: "json",
                 data: getData()
+            }).done(function () {
+                var button = $("#generate");
+                button.popover({
+                    html: true,
+                    content: '<div style="white-space: nowrap;">' +
+                    '<span class="glyphicon glyphicon-floppy-saved" style="font-size:1.3em"></span>' +
+                    ' Your design have been updated' +
+                    '</div>',
+                    placement: "bottom",
+                    trigger: "manual"
+                }).popover('show');
+                setTimeout($().popover.bind(button, 'hide'), 1800)
             })
         });
         $("#run").click(function () {
@@ -405,8 +417,9 @@
     <div class="container">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                <li><a id="generate" href="#">Save design</a></li>
                 <li><a id="get_design" href="#">Get design</a></li>
-                  <li>
+                <li>
                     <a id="set_design" href="#" onclick="$('#design_file').click()">Set design</a>
                     <input type="file" name="design_file" id="design_file" style="display: none"/>
                 </li>
