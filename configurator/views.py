@@ -47,24 +47,33 @@ def reset_design(request):
 
 
 def run(request):
+    do_stop()
+
     edges = json.loads(request.POST['edges'])
     nodes = json.loads(request.POST['nodes'])
     generation.run(nodes, edges, loader, 'out')
-    cmd = "cd out && chmod a+x up.sh && ./up.sh"
+
+    cmd = "cp -r out netlab-dockerised && cd netlab-dockerised && chmod a+x up.sh && ./up.sh"
     popen = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     result = {'result': 'ok', 'stdout': popen.stdout.read(), 'stderr': popen.stderr.read()}
+
     print 'RUN stdout:', result['stdout']
     print 'RUN stdout:', result['stderr']
     return HttpResponse(json.dumps(result))
 
 
 def stop(request):
-    cmd = "cd out && docker-compose stop -t 2 && docker-compose rm -vf"
+    result = do_stop()
+    return HttpResponse(json.dumps(result))
+
+
+def do_stop():
+    cmd = "cd netlab-dockerised && docker-compose kill && docker-compose down && cd .. && rm -r netlab-dockerised"
     popen = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     result = {'result': 'ok', 'stdout': popen.stdout.read(), 'stderr': popen.stderr.read()}
     print 'STOP stdout:', result['stdout']
     print 'STOP stdout:', result['stderr']
-    return HttpResponse(json.dumps(result))
+    return result
 
 
 def _load_design():
