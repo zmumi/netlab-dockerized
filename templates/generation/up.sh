@@ -24,3 +24,5 @@ docker exec {{router_name}} sed -i.bak s/PLACEHOLDER_{{lan_params['mac']}}/$INTE
 {% endfor %}
 docker exec {{router_name}} /etc/init.d/vyatta-router restart
 {% endfor %}
+
+docker-compose restart
