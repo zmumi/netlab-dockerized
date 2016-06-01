@@ -25,4 +25,13 @@ docker exec {{router_name}} sed -i.bak s/PLACEHOLDER_{{lan_params['mac']}}/$INTE
 docker exec {{router_name}} /etc/init.d/vyatta-router restart
 {% endfor %}
 
+####################################################
+###### Fix network problems on docker-machine ######
+####################################################
+
 docker-compose restart
+sleep 4
+{% for router_name, params in routers.items() %}
+docker exec {{router_name}} service ssh restart {% endfor %}
+{% for client_name, params in clients.items() %}
+docker exec {{client_name}} service ssh restart {% endfor %}
