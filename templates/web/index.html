@@ -1,10 +1,10 @@
 {% load staticfiles %}
 <script src="{% static "lib/jquery-1.12.0.min.js" %}"></script>
 <script src="{% static "lib/vis/vis.js" %}"></script>
+<script src="{% static "lib/bootstrap.min.js" %}" crossorigin="anonymous"></script>
 <link href="{% static "lib/vis/vis.css" %}" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" href="{% static "lib/bootstrap.min.css" %}" crossorigin="anonymous">
 <link rel="stylesheet" href="{% static "lib/bootstrap-theme.min.css" %}" crossorigin="anonymous">
-<script src="{% static "lib/bootstrap.min.js" %}" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="{% static "configurator/style.css" %}"/>
 
 <script type="text/javascript">
@@ -115,6 +115,9 @@
         });
     }
 
+    function validateModal(modalID){
+        return  $(modalID).find(':invalid').length === 0;
+    }
 
     function draw() {
 
@@ -254,67 +257,78 @@
         });
 
         $('#lanNodeSave').click(function () {
-            nodes.update({
-                id: $('#lanNodeID').val(),
-                label: $('#lanNodeID').val(),
-                properties: {
-                    subnet: $('#lanNodeSubnet').val(),
-                    type: "lan"
-                }
-            });
-            $('#lanNodeModal').modal('hide')
+            if(validateModal('#lanNodeModal')){
+                nodes.update({
+                    id: $('#lanNodeID').val(),
+                    label: $('#lanNodeID').val(),
+                    properties: {
+                        subnet: $('#lanNodeSubnet').val(),
+                        type: "lan"
+                        }
+                    });
+                $('#lanNodeModal').modal('hide')
+            }
+
         });
 
         $('#clientNodeSave').click(function () {
-            nodes.update({
-                id: $('#clientNodeID').val(),
-                label: $('#clientNodeID').val(),
-                properties: {
-                    network: $('#clientNodeNetwork').val(),
-                    ip: $('#clientNodeIP').val(),
-                    gateway: $('#clientNodeGateway').val(),
-                    type: "client"
-                }
-            });
-            $('#clientNodeModal').modal('hide')
+            if(validateModal('#clientNodeModal')){
+                nodes.update({
+                    id: $('#clientNodeID').val(),
+                    label: $('#clientNodeID').val(),
+                    properties: {
+                        network: $('#clientNodeNetwork').val(),
+                        ip: $('#clientNodeIP').val(),
+                        gateway: $('#clientNodeGateway').val(),
+                        type: "client"
+                    }
+                });
+                $('#clientNodeModal').modal('hide')
+            }
         });
 
         $('#routerNodeSave').click(function () {
-            nodes.update({
-                id: $('#routerNodeID').val(),
-                label: $('#routerNodeID').val(),
-                properties: {
-                    type: "router"
+            if(validateModal('#routerNodeModal')){
+                nodes.update({
+                    id: $('#routerNodeID').val(),
+                    label: $('#routerNodeID').val(),
+                    properties: {
+                        type: "router"
+                    }
+                });
+                $('#routerNodeModal').modal('hide')
                 }
-            });
-            $('#routerNodeModal').modal('hide')
         });
 
         $('#routerEdgeSave').click(function () {
-            edges.update({
-                id: $('#routerEdgeID').val(),
-                from: $('#routerEdgeFrom').val(),
-                to: $('#routerEdgeTo').val(),
-                properties: {
-                    ip: $('#routerEdgeIP').val(),
-                    type: "router"
-                }
-            });
-            $('#routerEdgeModal').modal('hide')
+            if(validateModal('#routerEdgeModal')){
+                edges.update({
+                    id: $('#routerEdgeID').val(),
+                    from: $('#routerEdgeFrom').val(),
+                    to: $('#routerEdgeTo').val(),
+                    properties: {
+                        ip: $('#routerEdgeIP').val(),
+                        type: "router"
+                    }
+                });
+                $('#routerEdgeModal').modal('hide')
+            }
         });
 
         $('#clientEdgeSave').click(function () {
-            edges.update({
-                id: $('#clientEdgeID').val(),
-                from: $('#clientEdgeFrom').val(),
-                to: $('#clientEdgeTo').val(),
-                properties: {
-                    gateway: $('#clientEdgeGateway').val(),
-                    ip: $('#clientEdgeIP').val(),
-                    type: "client"
-                }
-            });
-            $('#clientEdgeModal').modal('hide')
+            if(validateModal('#clientEdgeModal')){
+                edges.update({
+                    id: $('#clientEdgeID').val(),
+                    from: $('#clientEdgeFrom').val(),
+                    to: $('#clientEdgeTo').val(),
+                    properties: {
+                        gateway: $('#clientEdgeGateway').val(),
+                        ip: $('#clientEdgeIP').val(),
+                        type: "client"
+                    }
+                });
+                $('#clientEdgeModal').modal('hide')
+            }
         });
 
 
