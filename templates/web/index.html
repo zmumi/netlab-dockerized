@@ -71,6 +71,17 @@
         return lans;
     }
 
+     function getAllLinksConnectedToNode(nodeId) {
+        var links = [];
+        var allEdges = edges.get();
+        for (var edge in allEdges) {
+            if (allEdges[edge].from == nodeId || allEdges[edge].to == nodeId) {
+                links.push(allEdges[edge].id);
+            }
+        }
+        return links;
+    }
+
     function setSelectionsRouterLan() {
         var routers = getRouters();
         var lans = getLans();
@@ -196,25 +207,52 @@
         });
 
         $('#lanNodeDelete').click(function () {
-            nodes.remove($('#lanNodeID').val());
+            var lanNodeId = $('#lanNodeID').val();
+            var linksToRemove = getAllLinksConnectedToNode(lanNodeId);
+            for(var i in linksToRemove){
+                edges.remove(linksToRemove[i]);
+                console.log('Link removed: ' + linksToRemove[i]);
+            }
+            nodes.remove(lanNodeId);
+            console.log('Node removed: ' + lanNodeId);
+
             $('#lanNodeModal').modal('hide')
         });
+
         $('#clientNodeDelete').click(function () {
-            nodes.remove($('#clientNodeID').val());
+            var clientNodeId = $('#clientNodeID').val();
+            var linksToRemove = getAllLinksConnectedToNode(clientNodeId);
+            for(var i in linksToRemove){
+                edges.remove(linksToRemove[i]);
+                console.log('Link removed: ' + linksToRemove[i]);
+            }
+            nodes.remove(clientNodeId);
+            console.log('Node removed: ' + clientNodeId);
             $('#clientNodeModal').modal('hide')
         });
+
         $('#routerNodeDelete').click(function () {
-            nodes.remove($('#routerNodeID').val());
+            var routerNodeId = $('#routerNodeID').val();
+            var linksToRemove = getAllLinksConnectedToNode(routerNodeId);
+            for(var i in linksToRemove){
+                edges.remove(linksToRemove[i]);
+                console.log('Link removed: ' + linksToRemove[i]);
+            }
+            nodes.remove(routerNodeId);
+            console.log('Node removed: ' + routerNodeId);
             $('#routerNodeModal').modal('hide')
         });
+
         $('#clientEdgeDelete').click(function () {
             edges.remove($('#clientEdgeID').val());
             $('#clientEdgeModal').modal('hide')
         });
+
         $('#routerEdgeDelete').click(function () {
             edges.remove($('#routerEdgeID').val());
             $('#routerEdgeModal').modal('hide')
         });
+
         $('#lanNodeSave').click(function () {
             nodes.update({
                 id: $('#lanNodeID').val(),
@@ -226,6 +264,7 @@
             });
             $('#lanNodeModal').modal('hide')
         });
+
         $('#clientNodeSave').click(function () {
             nodes.update({
                 id: $('#clientNodeID').val(),
@@ -239,6 +278,7 @@
             });
             $('#clientNodeModal').modal('hide')
         });
+
         $('#routerNodeSave').click(function () {
             nodes.update({
                 id: $('#routerNodeID').val(),
@@ -249,6 +289,7 @@
             });
             $('#routerNodeModal').modal('hide')
         });
+
         $('#routerEdgeSave').click(function () {
             edges.update({
                 id: $('#routerEdgeID').val(),
@@ -261,6 +302,7 @@
             });
             $('#routerEdgeModal').modal('hide')
         });
+
         $('#clientEdgeSave').click(function () {
             edges.update({
                 id: $('#clientEdgeID').val(),
