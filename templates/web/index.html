@@ -143,7 +143,14 @@
             nodes: nodes,
             edges: edges
         };
-        var options = {};
+        var options = {
+            "physics": false,
+            "edges": {
+                "smooth": {
+                    "type": "discrete"
+                }
+            }
+        };
         network = new vis.Network(container, data, options);
 
 
