@@ -80,6 +80,5 @@ def _load_design():
     try:
         context = json.loads(open('out/design.json').read())
     except:
-        print 'Unable to load design file'
-        context = {'edges': [], 'nodes': []}
+        context = {'edges': [], 'nodes': [], 'error': 'Unable to load design file'}
     return context
