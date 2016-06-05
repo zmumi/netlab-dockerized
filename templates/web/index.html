@@ -71,7 +71,7 @@
         return lans;
     }
 
-     function getAllLinksConnectedToNode(nodeId) {
+    function getAllLinksConnectedToNode(nodeId) {
         var links = [];
         var allEdges = edges.get();
         for (var edge in allEdges) {
@@ -115,8 +115,8 @@
         });
     }
 
-    function validateModal(modalID){
-        return  $(modalID).find(':invalid').length === 0;
+    function validateModal(modalID) {
+        return $(modalID).find(':invalid').length === 0;
     }
 
     function draw() {
@@ -126,7 +126,7 @@
         // create an array with nodes
         nodes = new vis.DataSet();
         nodes.on('*', function (kind, event) {
-            if (kind != 'remove'){
+            if (kind != 'remove') {
                 color_nodes(event.items);
             }
         });
@@ -219,7 +219,7 @@
         $('#lanNodeDelete').click(function () {
             var lanNodeId = $('#lanNodeID').val();
             var linksToRemove = getAllLinksConnectedToNode(lanNodeId);
-            for(var i in linksToRemove){
+            for (var i in linksToRemove) {
                 edges.remove(linksToRemove[i]);
                 console.log('Link removed: ' + linksToRemove[i]);
             }
@@ -232,7 +232,7 @@
         $('#clientNodeDelete').click(function () {
             var clientNodeId = $('#clientNodeID').val();
             var linksToRemove = getAllLinksConnectedToNode(clientNodeId);
-            for(var i in linksToRemove){
+            for (var i in linksToRemove) {
                 edges.remove(linksToRemove[i]);
                 console.log('Link removed: ' + linksToRemove[i]);
             }
@@ -244,7 +244,7 @@
         $('#routerNodeDelete').click(function () {
             var routerNodeId = $('#routerNodeID').val();
             var linksToRemove = getAllLinksConnectedToNode(routerNodeId);
-            for(var i in linksToRemove){
+            for (var i in linksToRemove) {
                 edges.remove(linksToRemove[i]);
                 console.log('Link removed: ' + linksToRemove[i]);
             }
@@ -264,22 +264,22 @@
         });
 
         $('#lanNodeSave').click(function () {
-            if(validateModal('#lanNodeModal')){
+            if (validateModal('#lanNodeModal')) {
                 nodes.update({
                     id: $('#lanNodeID').val(),
                     label: $('#lanNodeID').val(),
                     properties: {
                         subnet: $('#lanNodeSubnet').val(),
                         type: "lan"
-                        }
-                    });
+                    }
+                });
                 $('#lanNodeModal').modal('hide')
             }
 
         });
 
         $('#clientNodeSave').click(function () {
-            if(validateModal('#clientNodeModal')){
+            if (validateModal('#clientNodeModal')) {
                 nodes.update({
                     id: $('#clientNodeID').val(),
                     label: $('#clientNodeID').val(),
@@ -295,7 +295,7 @@
         });
 
         $('#routerNodeSave').click(function () {
-            if(validateModal('#routerNodeModal')){
+            if (validateModal('#routerNodeModal')) {
                 nodes.update({
                     id: $('#routerNodeID').val(),
                     label: $('#routerNodeID').val(),
@@ -304,11 +304,11 @@
                     }
                 });
                 $('#routerNodeModal').modal('hide')
-                }
+            }
         });
 
         $('#routerEdgeSave').click(function () {
-            if(validateModal('#routerEdgeModal')){
+            if (validateModal('#routerEdgeModal')) {
                 edges.update({
                     id: $('#routerEdgeID').val(),
                     from: $('#routerEdgeFrom').val(),
@@ -323,7 +323,7 @@
         });
 
         $('#clientEdgeSave').click(function () {
-            if(validateModal('#clientEdgeModal')){
+            if (validateModal('#clientEdgeModal')) {
                 edges.update({
                     id: $('#clientEdgeID').val(),
                     from: $('#clientEdgeFrom').val(),
@@ -347,23 +347,30 @@
             }
         }
 
+        function showActionResult(element, text, icon, isError) {
+            var style = isError ? 'color:red' : '';
+            element.popover({
+                html: true,
+                content: '<div style="white-space: nowrap; ' + style + '">' +
+                '<span class="glyphicon ' + icon + '" style="font-size:1.3em"></span> ' +
+                text +
+                '</div>',
+                placement: "bottom",
+                trigger: "manual"
+            }).popover('show');
+            setTimeout($().popover.bind(element, 'hide'), 1800)
+        }
+
         $("#generate").click(function () {
             $.post({
                 url: "configurator/generate",
                 dataType: "json",
-                data: getData()
+                data: getData(),
+                error: function (error) {
+                    showActionResult($("#generate"), error.statusText, 'glyphicon-floppy-remove', true);
+                }
             }).done(function () {
-                var button = $("#generate");
-                button.popover({
-                    html: true,
-                    content: '<div style="white-space: nowrap;">' +
-                    '<span class="glyphicon glyphicon-floppy-saved" style="font-size:1.3em"></span>' +
-                    ' Your design have been updated' +
-                    '</div>',
-                    placement: "bottom",
-                    trigger: "manual"
-                }).popover('show');
-                setTimeout($().popover.bind(button, 'hide'), 1800)
+                showActionResult($("#generate"), 'Your design has been updated', 'glyphicon-floppy-saved');
             })
         });
         $("#run").click(function () {
@@ -371,9 +378,14 @@
             $.post({
                 url: "configurator/run",
                 dataType: "json",
-                data: getData()
+                data: getData(),
+                error: function (error) {
+                    $('#runModal').modal('hide');
+                    showActionResult($("#run"), error.statusText, 'glyphicon-remove-sign', true);
+                }
             }).done(function () {
                 $('#runModal').modal('hide');
+                showActionResult($("#run"), 'Your simulation is running', 'glyphicon-random');
             })
         });
         $("#stop").click(function () {
@@ -381,9 +393,14 @@
             $.post({
                 url: "configurator/stop",
                 dataType: "json",
-                data: {csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()}
+                data: {csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()},
+                error: function (error) {
+                    $('#stopModal').modal('hide');
+                    showActionResult($("#stop"), error.statusText, 'glyphicon-remove-sign', true);
+                }
             }).done(function (result) {
                 $('#stopModal').modal('hide');
+                showActionResult($("#stop"), 'Your simulation has been stopped', 'glyphicon glyphicon-check');
             })
         });
 
@@ -391,18 +408,26 @@
             $.post({
                 url: "configurator/generate",
                 dataType: "json",
-                data: getData()
+                data: getData(),
+                error: function (error) {
+                    showActionResult($("#get_design"), error.statusText, 'glyphicon-remove-sign', true);
+                }
             }).done(function () {
                 window.open('configurator/get_design', '_blank');
+                showActionResult($("#get_design"), 'Your design has been prepared', 'glyphicon glyphicon-check');
             })
         });
         $("#get_project").click(function () {
             $.post({
                 url: "configurator/generate",
                 dataType: "json",
-                data: getData()
+                data: getData(),
+                error: function (error) {
+                    showActionResult($("#get_project"), error.statusText, 'glyphicon-remove-sign', true);
+                }
             }).done(function () {
                 window.open('configurator/get_project', '_blank');
+                showActionResult($("#get_project"), 'Your project files have been prepared', 'glyphicon glyphicon-check');
             })
         });
         $('#design_file').on('change', function () {
@@ -415,7 +440,10 @@
                 cache: false,
                 contentType: false,
                 processData: false,
-                type: 'POST'
+                type: 'POST',
+                error: function (error) {
+                    showActionResult($("#design_file"), error.statusText, 'glyphicon-remove-sign', true);
+                }
             }).done(function () {
                 location.reload();
             });
@@ -426,11 +454,19 @@
                 url: "configurator/reset_design",
                 data: {
                     csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+                },
+                error: function (error) {
+                    $('#stopModal').modal('hide');
+                    showActionResult($("#reset_design"), error.statusText, 'glyphicon-remove-sign', true);
                 }
             }).done(function () {
                 location.reload();
             });
         });
+
+        if ('{{ error }}') {
+            showActionResult($(".navbar"), '{{ error }}', 'glyphicon-remove-sign', true);
+        }
     })
 
 
