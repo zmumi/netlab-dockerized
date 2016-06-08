@@ -12,7 +12,6 @@
     /* GLOBALS */
     var nodes, edges, network;
 
-
     function color_nodes(items) {
         var colors = {
             router: {
@@ -82,6 +81,26 @@
         return links;
     }
 
+    function getAllRoutersIPConnectedToLan(lanID) {
+        var ips = [];
+        var allEdges = edges.get();
+        for (var edge in allEdges) {
+            if (allEdges[edge].to == lanID && allEdges[edge].properties.type == 'router') {
+                ips.push(allEdges[edge].properties.ip);
+            }
+        }
+        return ips;
+    }
+
+    function setSelectionGateways(){
+        var ips = getAllRoutersIPConnectedToLan($('#clientEdgeTo').val());
+        $('#clientEdgeGateway').empty();
+        $('#clientEdgeGateway').append('<option value="" default disabled selected>Select gateway</option.');
+        $(ips).each(function (i, v) {
+            $('#clientEdgeGateway').append($("<option>", {value: v, html: v}));
+        });
+    }
+
     function setSelectionsRouterLan() {
         var routers = getRouters();
         var lans = getLans();
@@ -130,10 +149,77 @@
         return usedIPs;
     }
 
-    function ipToNumber(ip) {
+    function getSubnetIP(subnet) {
+        splitted = subnet.split('/');
+        return binToNum(calcNetBinAddress(ipNumToBinaryStr(ipAddressToNumber(splitted[0])), maskToBinaryStr(splitted[1])) );
+    }
+
+    function getSubnetIPWithMaskString(subnet) {
+        var mask = subnet.split('/')[1];
+        var subnetAddNumber = getSubnetIP(subnet);
+        return numToIp(subnetAddNumber)+'/'+mask;
+    }
+
+    function getFirstFreeIpInGivenSubnet(subnetAddrNumber){
+        subnetAddrNumber += 2;
+        var usedIPs = getUsedIPs();
+        while(usedIPs[numToIp(subnetAddrNumber)]){
+            subnetAddrNumber +=1;
+        }
+        return numToIp(subnetAddrNumber);
+
+    }
+
+    function ipNumToBinaryStr(ipNumber) {
+        var numStr = ipNumber.toString(2);
+        var numZeros = 32 - numStr.length;
+        if (numZeros > 0){
+        	for (var i = 1; i <= numZeros; i++){
+        	    numStr = "0" + numStr;
+        	}
+        }
+        return numStr;
+    }
+
+    function binToNum(binaryString) {
+        return parseInt(binaryString, 2);
+    }
+
+    function ipAddressToNumber(ip) {
         var d = ip.split('.');
         return ((((((+d[0])*256)+(+d[1]))*256)+(+d[2]))*256)+(+d[3]);
     }
+
+    function calcNetBinAddress(addressBinStr, netmaskBinStr) {
+        var netaddressBinStr = '';
+        var addressBit = 0;
+        var netmaskBit = 0;
+        for( pos = 0; pos < 32; pos ++ ) {
+            addressBit = addressBinStr.substr( pos, 1 );
+            netmaskBit = netmaskBinStr.substr( pos, 1 );
+            if( addressBit == netmaskBit ) {
+            	netaddressBinStr += addressBit.toString();
+            }
+            else{
+            	netaddressBinStr += '0';
+            }
+        }
+        return netaddressBinStr;
+    }
+
+    function maskToBinaryStr( maskBitsNumber ) {
+        var bitString = '';
+        var numberOfOnes = maskBitsNumber;
+        while( numberOfOnes-- ){
+            bitString += '1';
+        }
+        numberOfZeros = 32 - maskBitsNumber;
+        while( numberOfZeros-- ) {
+            bitString += '0';
+        }
+        return bitString;
+    }
+
 
     function numToIp(number) {
         var ip=number%256;
@@ -162,8 +248,10 @@
         else return -1;
     };
 
-    var inSubNet = function(ip, subnet)
+
+    function inSubNet(ip, subnet)
     {
+        subnet = getSubnetIPWithMaskString(subnet);
         var mask, base_ip, long_ip = ip2long(ip);
         if( (mask = subnet.match(/^(.*?)\/(\d{1,2})$/)) && ((base_ip=ip2long(mask[1])) >= 0) )
         {
@@ -187,28 +275,47 @@
           $('#routerEdgeIP').attr("placeholder", "IP: " + routerIP + " doesn't belong to subnet: " + lanSubnet).val('');
           return;
         }
+        if(numToIp(getSubnetIP(lanSubnet)+1) == routerIP){
+            $('#routerEdgeIP').attr("placeholder", "First IP in given subnet: " + lanSubnet + " is not allowed. Try another one.").val('');
+            return;
+        }
     }
 
      function validateClientIP(lanID, clientIP){
-        if(isIPAlreadyUsed(clientIP)){
-           $('#clientEdgeIP').attr("placeholder", "IP: " + clientIP + " is already used.").val('');
-            return;
+        if(isClientEdgeHasChanged($('#clientEdgeID').val())){
+            if(isIPAlreadyUsed(clientIP)){
+               $('#clientEdgeIP').attr("placeholder", "IP: " + clientIP + " is already used.").val('');
+                return;
+            }
+            var lanSubnet = nodes.get(lanID).properties.subnet;
+            if(!inSubNet(clientIP,lanSubnet)){
+              $('#clientEdgeIP').attr("placeholder", "IP: " + clientIP + " doesn't belong to subnet: " + lanSubnet).val('');
+              return;
+            }
+            if(numToIp(getSubnetIP(lanSubnet)+1) == clientIP){
+                $('#clientEdgeIP').attr("placeholder", "First IP in given subnet: " + lanSubnet + " is not allowed. Try another one.").val('');
+                return;
+            }
         }
-        var lanSubnet = nodes.get(lanID).properties.subnet;
-        if(!inSubNet(clientIP,lanSubnet)){
-          $('#clientEdgeIP').attr("placeholder", "IP: " + clientIP + " doesn't belong to subnet: " + lanSubnet).val('');
-          return;
+        if($('#clientEdgeGateway').val() ==''){
+            $('#clientEdgeGateway').attr("placeholder", "Gateway must be specified. If there is no option, create router-lan link first.")
         }
-    }
+     }
 
     function isRouterEdgeHasChanged(routerEdgeId){
         var edge = edges.get(routerEdgeId);
-        return !(edge.to == $('#routerEdgeTo').val() && edge.from == $('#routerEdgeFrom').val() && edge.properties.ip == $('#routerEdgeIP').val());
+        if(edge != null){
+            return !(edge.to == $('#routerEdgeTo').val() && edge.from == $('#routerEdgeFrom').val() && edge.properties.ip == $('#routerEdgeIP').val());
+        }
+        return true;
     }
 
     function isClientEdgeHasChanged(clientEdgeId){
         var edge = edges.get(clientEdgeId);
-        return !(edge.to == $('#clientEdgeTo').val() && edge.from == $('#clientEdgeFrom').val() && edge.properties.ip == $('#clientEdgeIP').val() && edge.properties.gateway == $('#clientEdgeGateway').val());
+        if(edge != null){
+            return !(edge.to == $('#clientEdgeTo').val() && edge.from == $('#clientEdgeFrom').val() && edge.properties.ip == $('#clientEdgeIP').val());
+        }
+        return true;
     }
 
 
@@ -268,6 +375,7 @@
                     $('#clientEdgeID').val(edge.id);
                     $('#clientEdgeFrom').val(edge.from);
                     $('#clientEdgeTo').val(edge.to);
+                    setSelectionGateways();
                     $('#clientEdgeIP').val(edge.properties.ip);
                     $('#clientEdgeGateway').val(edge.properties.gateway);
                     $('#clientEdgeModal').modal('show')
@@ -299,12 +407,14 @@
         $('#routerLinkCreate').click(function () {
             $('#routerEdgeModal input').val('');
             setSelectionsRouterLan();
+            $('#routerEdgeTo').trigger("change");
             $('#routerEdgeModal').modal('show');
         });
 
         $('#clientLinkCreate').click(function () {
             $('#clientEdgeModal input').val('');
             setSelectionsClientLan();
+            $('#clientEdgeTo').trigger("change");
             $('#clientEdgeModal').modal('show');
         });
 
@@ -361,7 +471,7 @@
                     id: $('#lanNodeID').val(),
                     label: $('#lanNodeID').val(),
                     properties: {
-                        subnet: $('#lanNodeSubnet').val(),
+                        subnet: getSubnetIPWithMaskString($('#lanNodeSubnet').val()),
                         type: "lan"
                     }
                 });
@@ -418,8 +528,13 @@
             }
         });
 
+        $('#routerEdgeTo').change(function(){
+            var subnet = nodes.get($('#routerEdgeTo').val()).properties.subnet;
+            $('#routerEdgeIP').val(getFirstFreeIpInGivenSubnet(getSubnetIP(subnet)));
+        });
+
+
         $('#clientEdgeSave').click(function () {
-            if(isClientEdgeHasChanged($('#clientEdgeID').val())){
                 validateClientIP($('#clientEdgeTo').val(), $('#clientEdgeIP').val());
                 if (validateModal('#clientEdgeModal')) {
                     edges.update({
@@ -434,10 +549,13 @@
                     });
                     $('#clientEdgeModal').modal('hide');
                 }
-            }
-            else{
-                $('#clientEdgeModal').modal('hide');
-            }
+
+        });
+
+        $('#clientEdgeTo').change(function(){
+            var subnet = nodes.get($('#clientEdgeTo').val()).properties.subnet;
+            $('#clientEdgeIP').val(getFirstFreeIpInGivenSubnet(getSubnetIP(subnet)));
+            setSelectionGateways();
         });
 
 
