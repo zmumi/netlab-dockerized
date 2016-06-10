@@ -12,7 +12,7 @@
     /* GLOBALS */
     var nodes, edges, network;
 
-    function color_nodes(items) {
+    function colorNodes(items) {
         var colors = {
             router: {
                 border: '#2B7CE9',
@@ -157,23 +157,23 @@
     }
 
     function getFirstFreeIpInGivenSubnet(subnet) {
-        var possibleIP_InSubnet = IPv4_Address_Converter(subnet).firstIpNetaddressInteger + 1; //to avoid first net address
+        var possibleIpInSubnet = IPv4_Address_Converter(subnet).firstIpNetaddressInteger + 1; //to avoid first net address
         var usedIPs = getUsedIPs();
 
-        while (usedIPs[IPv4_intA_to_dotquadA(possibleIP_InSubnet)]) {
-            possibleIP_InSubnet += 1;
+        while (usedIPs[IPv4_intA_to_dotquadA(possibleIpInSubnet)]) {
+            possibleIpInSubnet += 1;
         }
 
-        return IPv4_intA_to_dotquadA(possibleIP_InSubnet);
+        return IPv4_intA_to_dotquadA(possibleIpInSubnet);
     }
 
-    function is_IP_In_Subnet(ip, subnet) {
+    function isIpInSubnet(ip, subnet) {
         var ipAddressesInfo = IPv4_Address_Converter(subnet);
-        var int_SubnetIP = ipAddressesInfo.netaddressInteger;
-        var int_SubnetBroadcastIP = ipAddressesInfo.netbcastInteger;
-        var int_checkedIP = IPv4_dotquadA_to_intA(ip);
+        var intSubnetIP = ipAddressesInfo.netaddressInteger;
+        var intSubnetBroadcastIP = ipAddressesInfo.netbcastInteger;
+        var intCheckedIP = IPv4_dotquadA_to_intA(ip);
 
-        return int_SubnetIP < int_checkedIP && int_checkedIP < int_SubnetBroadcastIP;
+        return intSubnetIP < intCheckedIP && intCheckedIP < intSubnetBroadcastIP;
     };
 
     function isIPAlreadyUsed(routerIP) {
@@ -188,7 +188,7 @@
             }
         }
         var lanSubnet = nodes.get(lanID).properties.subnet;
-        if (!is_IP_In_Subnet(routerIP, lanSubnet)) {
+        if (!isIpInSubnet(routerIP, lanSubnet)) {
             $('#routerEdgeIP').attr("placeholder", "IP: " + routerIP + " doesn't belong to subnet: " + lanSubnet).val('');
             return;
         }
@@ -207,7 +207,7 @@
             }
         }
         var lanSubnet = nodes.get(lanID).properties.subnet;
-        if (!is_IP_In_Subnet(clientIP, lanSubnet)) {
+        if (!isIpInSubnet(clientIP, lanSubnet)) {
             $('#clientEdgeIP').attr("placeholder", "IP: " + clientIP + " doesn't belong to subnet: " + lanSubnet).val('');
             return;
         }
@@ -242,15 +242,15 @@
         nodes = new vis.DataSet();
         nodes.on('*', function (kind, event) {
             if (kind != 'remove') {
-                color_nodes(event.items);
+                colorNodes(event.items);
             }
         });
-        nodes.add(initial_nodes);
+        nodes.add(INITIAL_NODES);
 
 
         // create an array with edges
         edges = new vis.DataSet();
-        edges.add(initial_edges);
+        edges.add(INITIAL_EDGES);
 
         // create a network
         var container = document.getElementById('network');

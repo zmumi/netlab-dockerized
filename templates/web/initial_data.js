@@ -1,4 +1,4 @@
-initial_nodes = [{% for node in nodes %}{
+INITIAL_NODES = [{% for node in nodes %}{
     properties: {
         {% for prop, val in node.items %}
         {% if prop != 'id' %}
@@ -11,7 +11,7 @@ initial_nodes = [{% for node in nodes %}{
 },{% endfor %}]
 
 
-initial_edges = [{% for edge in edges %}{
+INITIAL_EDGES = [{% for edge in edges %}{
     properties: {
         {% for prop, val in edge.items %}
         {% if prop != 'id' and prop != 'from' and prop != 'to' %}
