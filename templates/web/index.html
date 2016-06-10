@@ -92,13 +92,23 @@
         return ips;
     }
 
+    function generateOptions(select, values, defaultOption) {
+        select.empty();
+        if (!values || values.length === 0) {
+            select.append('<option value="" disabled selected>' + defaultOption + '</option.');
+        } else {
+            $(values).each(function (i, v) {
+                select.append($("<option>", {value: v, html: v}));
+            });
+            select.val(select.children().last().val());
+        }
+    }
+
+
     function setSelectionGateways() {
         var ips = getAllRoutersIPConnectedToLan($('#clientEdgeTo').val());
-        $('#clientEdgeGateway').empty();
-        $('#clientEdgeGateway').append('<option value="" disabled selected>"Gateway must be specified. If there is no option, create router-lan link first."</option.');
-        $(ips).each(function (i, v) {
-            $('#clientEdgeGateway').append($("<option>", {value: v, html: v, selected: true}));
-        });
+        var defaultOption = "Gateway must be specified. If there is no option, create router-lan link first.";
+        generateOptions($('#clientEdgeGateway'), ips, defaultOption);
     }
 
     function setSelectionsRouterLan() {
@@ -106,15 +116,8 @@
         var lans = getLans();
         $('#routerEdgeIP').empty();
         $('#routerEdgeID').empty();
-        $('#routerEdgeFrom').empty();
-        $('#routerEdgeTo').empty();
-        $(routers).each(function (i, v) {
-            $('#routerEdgeFrom').append($("<option>", {value: v, html: v}));
-        });
-
-        $(lans).each(function (i, v) {
-            $('#routerEdgeTo').append($("<option>", {value: v, html: v}));
-        });
+        generateOptions($('#routerEdgeFrom'), routers, "You need to add router first");
+        generateOptions($('#routerEdgeTo'), lans, "You need to add LAN first");
     }
 
     function setSelectionsClientLan() {
@@ -123,15 +126,8 @@
         $('#clientEdgeID').empty();
         $('#clientEdgeIP').empty();
         $('#clientEdgeGateway').empty();
-        $('#clientEdgeFrom').empty();
-        $('#clientEdgeTo').empty();
-        $(clients).each(function (i, v) {
-            $('#clientEdgeFrom').append($("<option>", {value: v, html: v}));
-        });
-
-        $(lans).each(function (i, v) {
-            $('#clientEdgeTo').append($("<option>", {value: v, html: v}));
-        });
+        generateOptions($('#clientEdgeFrom'), clients, "You need to add client first");
+        generateOptions($('#clientEdgeTo'), lans, "You need to add LAN first");
     }
 
     function validateModal(modalID) {
@@ -175,7 +171,6 @@
 
         return intSubnetIP < intCheckedIP && intCheckedIP < intSubnetBroadcastIP;
     }
-    ;
 
     function isIPAlreadyUsed(routerIP) {
         return getUsedIPs()[routerIP];
