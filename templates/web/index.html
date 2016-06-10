@@ -97,7 +97,7 @@
         $('#clientEdgeGateway').empty();
         $('#clientEdgeGateway').append('<option value="" disabled selected>"Gateway must be specified. If there is no option, create router-lan link first."</option.');
         $(ips).each(function (i, v) {
-            $('#clientEdgeGateway').append($("<option>", {value: v, html: v}));
+            $('#clientEdgeGateway').append($("<option>", {value: v, html: v, selected: true}));
         });
     }
 
@@ -174,7 +174,8 @@
         var intCheckedIP = IPv4_dotquadA_to_intA(ip);
 
         return intSubnetIP < intCheckedIP && intCheckedIP < intSubnetBroadcastIP;
-    };
+    }
+    ;
 
     function isIPAlreadyUsed(routerIP) {
         return getUsedIPs()[routerIP];
