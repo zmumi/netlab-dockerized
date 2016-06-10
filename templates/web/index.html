@@ -316,17 +316,29 @@
         });
 
         $('#routerLinkCreate').click(function () {
-            $('#routerEdgeModal input').val('');
-            setSelectionsRouterLan();
-            $('#routerEdgeTo').trigger("change");
-            $('#routerEdgeModal').modal('show');
+            try {
+                $('#routerEdgeModal input').val('');
+                setSelectionsRouterLan();
+                $('#routerEdgeTo').trigger("change");
+                $('#routerEdgeModal').modal('show');
+            } catch (e) {
+                console.error(e);
+                var content = 'Unable to add router link.<br>Ensure you have any routers and LANs.';
+                showActionResult($(".navbar"), content, 'glyphicon-remove-sign', true);
+            }
         });
 
         $('#clientLinkCreate').click(function () {
-            $('#clientEdgeModal input').val('');
-            setSelectionsClientLan();
-            $('#clientEdgeTo').trigger("change");
-            $('#clientEdgeModal').modal('show');
+            try {
+                $('#clientEdgeModal input').val('');
+                setSelectionsClientLan();
+                $('#clientEdgeTo').trigger("change");
+                $('#clientEdgeModal').modal('show');
+            } catch (e) {
+                console.error(e);
+                var content = 'Unable to add client link.<br>Ensure you have any clients and LANs.';
+                showActionResult($(".navbar"), content, 'glyphicon-remove-sign', true);
+            }
         });
 
         $('#lanNodeDelete').click(function () {
