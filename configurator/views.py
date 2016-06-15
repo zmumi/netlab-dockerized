@@ -42,7 +42,12 @@ def set_design(request):
 
 
 def reset_design(request):
-    shutil.copyfile('out/design.json.template', 'out/design.json')
+    shutil.copyfile('out/design.json.empty.template', 'out/design.json')
+    return HttpResponse('{"result":"ok"}')
+
+
+def sample_design(request):
+    shutil.copyfile('out/design.json.sample.template', 'out/design.json')
     return HttpResponse('{"result":"ok"}')
 
 

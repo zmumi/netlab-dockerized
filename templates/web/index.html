@@ -595,8 +595,20 @@
                     csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
                 },
                 error: function (error) {
-                    $('#stopModal').modal('hide');
                     showActionResult($("#reset_design"), error.statusText, 'glyphicon-remove-sign', true);
+                }
+            }).done(function () {
+                location.reload();
+            });
+        });
+        $("#sample_design").click(function () {
+            $.post({
+                url: "configurator/sample_design",
+                data: {
+                    csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val()
+                },
+                error: function (error) {
+                    showActionResult($("#sample_design"), error.statusText, 'glyphicon-remove-sign', true);
                 }
             }).done(function () {
                 location.reload();
@@ -657,7 +669,8 @@
                     <a id="set_design" href="#" onclick="$('#design_file').click()">Set design</a>
                     <input type="file" name="design_file" id="design_file" style="display: none"/>
                 </li>
-                <li><a id="reset_design" href="#">Reset design</a></li>
+                <li><a id="reset_design" href="#">Clear design</a></li>
+                <li><a id="sample_design" href="#">Sample design</a></li>
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
